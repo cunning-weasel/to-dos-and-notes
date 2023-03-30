@@ -10,6 +10,7 @@ lerna-debug.log*
 # Others
 node_modules
 .env
+README.md
 
 # Editor directories and files
 .vscode/*
