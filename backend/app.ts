@@ -23,7 +23,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 app.listen(port, () => {
-  console.log(`⚡️[weasel-server]: running at http://localhost:${port}`);
+  console.log(`⚡️[weasel-server]: running @ http://localhost:${port}`);
 });
 
 export default app;
