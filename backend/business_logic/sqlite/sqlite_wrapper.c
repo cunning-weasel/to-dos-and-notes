@@ -73,7 +73,8 @@ int main(int argc, char **argv)
 };
 
 // terminal command for compiling and linking code with sqlite3 lib
-// gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
+// compile: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
+// run comiled file: ./output_sqlite_wrapper
 
-// install sqlite stuff
+// install sqlite stuff linux
 // sudo apt-get install sqlite3 libsqlite3-dev
