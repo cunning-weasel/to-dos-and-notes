@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     // create table and sql var
     const char *create_table_sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
 
-    rc = sqlite3_exec(db, create_table_sql, 0, 0, &zErrMsg);
+    rc = sqlite3_exec(db, create_table_sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
     {
         fprintf(stderr, "SQL create error master weasel: %s\n", zErrMsg);
@@ -64,9 +64,12 @@ int main(int argc, char **argv)
     rc = sqlite3_exec(db, select_data_sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
     {
-        fprintf(stderr, "SQL error: %s\n", zErrMsg);
+        fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+
+    // remove entries with similar ids
+    // DELETE FROM test_table WHERE age <= 200;
 
     sqlite3_close(db);
     return 0;
