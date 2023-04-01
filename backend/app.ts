@@ -10,8 +10,9 @@ import usersRouter from "./routes/users";
 import mainAppRouter from "./routes/mainApp";
 import authRouter from "./routes/auth";
 
-const app = express();
 dotenv.config();
+
+const app = express();
 const port: string = process.env.PORT;
 
 // view engine
@@ -31,12 +32,13 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
+    // store: new SQLite_c_store({ db: 'whatever.db', dir: './var/db' })
+
   })
 );
 // passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
-
 // routes
 app.use("/", authRouter); // base page - login/ register
 app.use("/", usersRouter);
