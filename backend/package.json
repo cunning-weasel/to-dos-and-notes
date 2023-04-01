@@ -11,12 +11,14 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express-session": "^1.17.3",
+    "ffi-napi": "^4.0.3",
     "passport": "^0.6.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
+    "@types/ffi-napi": "^4.0.7",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
     "@types/passport": "^1.0.12",

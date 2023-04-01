@@ -8,14 +8,14 @@ html
     link(rel='stylesheet', href='/public/style.css')
   body
     h1.border.center weasel-templating on Express
-    h2.center Socket.IO chat room for now? 
+    h2.center Socket.IO ws lib? 
     .chat.center
       p#num-users
       .chat-box
         ul#messages
         form(action='')
           input#m(autocomplete='off')
-          button Send
+          button save
       a#logout(href='/logout') Logout
     script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js', integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=', crossorigin='anonymous')
     <script src='/socket.io/socket.io.js'></script>
