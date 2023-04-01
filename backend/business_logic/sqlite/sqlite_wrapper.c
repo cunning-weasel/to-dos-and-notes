@@ -49,6 +49,9 @@ int main(int argc, char **argv)
     if (sqlite3_changes(db) == 0)
     {
         // create table
+        // drill down on schema for use in other parts of app
+        //  "CREATE TABLE test_table 
+        //  (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         rc = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
 
