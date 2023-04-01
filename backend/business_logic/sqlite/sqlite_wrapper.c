@@ -2,7 +2,7 @@
 #include <sqlite3.h>
 
 // print out name and val for each col on the row
-static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
+static int row_callback(int numCols, char **valEachCol, char **azColName)
 {
     for (int i = 0; i < numCols; i++)
     {
@@ -14,14 +14,14 @@ static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **az
 
 int main(int argc, char **argv)
 {
-    // store connection in sqlite pointer var db
+    // store connection to sqlite in pointer to var db
     sqlite3 *db;
     char *zErrMsg = 0;
     // return code
     int rc;
-
-   char *sql;
+    char *sql;
     char *tableName = "test_table";
+
     // open db connection
     rc = sqlite3_open("test_Cqlite.db", &db);
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
         return (1); // status code of 1
     }
 
-    // check if table exists
+    // grab table and free mem routine
     sql = sqlite3_mprintf("SELECT name FROM sqlite_master WHERE type='table' AND name='%q';", tableName);
     rc = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
     sqlite3_free(sql);
@@ -45,25 +45,25 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    // check for changes in db
     if (sqlite3_changes(db) == 0)
     {
-        printf("Table '%s' does not exist.\n", tableName);
         // create table
         sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         rc = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
 
         if (rc != SQLITE_OK)
         {
-            fprintf(stderr, "SQL create table error master weasel: %s\n", zErrMsg);
+            fprintf(stderr, "SQL create table error master weasel: %s\n", zErrMsg); // should throw sqlite error right?
             sqlite3_free(zErrMsg);
             sqlite3_close(db);
             return 1;
         }
-        printf("Table '%s' created successfully.\n", tableName);
+        printf("No changes, assuming table '%s' does not exist - now has been created successfully master weasel\n", tableName);
     }
     else
     {
-        printf("Table '%s' already exists.\n", tableName);
+        printf("Table '%s' already exists master weasel!(assuming, actually)\n", tableName);
     }
 
     // insert data
@@ -72,12 +72,12 @@ int main(int argc, char **argv)
 
     if (rc != SQLITE_OK)
     {
-        fprintf(stderr, "SQL write error: %s\n", zErrMsg);
+        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Data inserted successfully master weasel\n");
+        fprintf(stdout, "Data insert success master weasel\n");
     }
 
     // select data
