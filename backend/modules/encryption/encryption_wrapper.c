@@ -3,6 +3,23 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
+// one way to handle errors instead of goto:
+// typedef struct encryption_op_t
+// {
+//     char *data;
+//     isize_t size;
+//     valid_t valid;
+// } encryption_op_t;
+
+// encryption_op_t do_encryption_op(char *);
+
+// encryption_op_t doThing = do_encryption_op("text");
+
+// if (doThing.valid)
+// {
+//     return;
+// }
+
 int main(void)
 {
     EVP_MD_CTX *ctx = NULL;
@@ -67,32 +84,17 @@ int main(void)
     BIO_dump_fp(stdout, outdigest, len);
 
     ret = 0;
-
+// if there are errors in the above process .... ->
 err:
     /* Clean up all the resources we allocated */
     OPENSSL_free(outdigest);
     EVP_MD_free(sha256);
     EVP_MD_CTX_free(ctx);
     if (ret != 0)
+    {
         ERR_print_errors_fp(stderr);
+    }
     return ret;
-}
-
-// one way to handle errors instead of goto:
-typedef struct encryption_op_t
-{
-    char *data;
-    isize_t size;
-    valid_t valid;
-} encryption_op_t;
-
-encryption_op_t do_encryption_op(char *);
-
-encryption_op_t doThing = do_encryption_op("text");
-
-if (doThing.valid)
-{
-    return;
 }
 
 // compile: gcc -o encryp_wrapper encryp_wrapper.c -lcrypto

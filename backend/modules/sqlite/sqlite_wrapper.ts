@@ -1,13 +1,17 @@
 // sqlite wrapper calls
 import ffi from "ffi-napi";
 
-export interface sqlite_wrapper_c_calls {
-  lib: [(arg: number) => number];
+interface sqlite_wrapper_row_callback {
+  lib: [int: number, char: string[], char: string[]];
 }
 
-// export const funcs?: sqlite_wrapper_c_calls = ffi.Library(
-//   "sqlite_wrapper_libc.so",
-//   {
-//     lib: ["int", ["int"]],
-//   }
-// );
+// need to compile this to lib to test, but there's 
+// still way too much to do
+const row_callback: sqlite_wrapper_row_callback = ffi.Library(
+  "sqlite_wrapper_libc.so",
+  {
+    lib: ["int", ["char", "char"]],
+  }
+);
+
+export default row_callback;

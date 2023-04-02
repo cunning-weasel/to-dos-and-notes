@@ -1,23 +1,26 @@
-// import db from ....
-// regular js approach
+import create_table_db from "../modules/sqlite/sqlite_wrapper";
 
-db.serialize(function() {
-  db.run("CREATE TABLE IF NOT EXISTS users ( \
+create_table_db.serialize(function () {
+  create_table_db.run(
+    "CREATE TABLE IF NOT EXISTS users ( \
     id INTEGER PRIMARY KEY, \
     username TEXT UNIQUE, \
-    hashed_password BLOB, \
+    hashed_image BLOB, \
     salt BLOB, \
     name TEXT, \
     email TEXT UNIQUE, \
     email_verified INTEGER \
-  )");
-  
-  db.run("CREATE TABLE IF NOT EXISTS todos ( \
+  )"
+  );
+
+  create_table_db.run(
+    "CREATE TABLE IF NOT EXISTS todos ( \
     id INTEGER PRIMARY KEY, \
     owner_id INTEGER NOT NULL, \
     title TEXT NOT NULL, \
     completed INTEGER \
-  )");
+  )"
+  );
 });
 
-module.exports = db;
+export default create_table_db;

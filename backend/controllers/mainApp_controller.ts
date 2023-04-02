@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import auth_email from "./services/auth_email";
+import auth_email from "../services/auth_email";
 
 async function get(req: Request, res: Response, next: NextFunction) {
   try {
@@ -10,18 +10,18 @@ async function get(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-async function create(req: Request, res: Response, next: NextFunction) {
+async function post(req: Request, res: Response, next: NextFunction) {
   try {
-    res.json(await auth_email.create(req.body));
+    res.json(await auth_email.post(req.body));
   } catch (err) {
     console.error(`Error while creating to-do/ note`, err.message);
     next(err);
   }
 }
 
-async function update(req: Request, res: Response, next: NextFunction) {
+async function put(req: Request, res: Response, next: NextFunction) {
   try {
-    res.json(await auth_email.update(req.params.id, req.body));
+    res.json(await auth_email.put(req.params.id, req.body));
   } catch (err) {
     console.error(`Error while updating to-do/ note`, err.message);
     next(err);
@@ -37,9 +37,11 @@ async function remove(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-module.exports = {
-  get,
-  create,
-  update,
-  remove,
-};
+export default { get, post, put, remove };
+
+// module.exports = {
+//   get,
+//   create,
+//   update,
+//   remove,
+// };

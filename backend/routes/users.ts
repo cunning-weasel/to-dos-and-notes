@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Request, Response } from "express";
 const router = express.Router();
 
 /* GET users listing. */
@@ -9,3 +9,4 @@ router.get("/users", function (req: Request, res: Response) {
 });
 
 export default router;
+

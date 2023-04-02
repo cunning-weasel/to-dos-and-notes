@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <sqlite3.h>
 
-// export funcs
-// #if defined(WIN32) || defined(_WIN32)
-// #else
-// #define EXPORT
-// #endif
-
-// EXPORT c_func(int x) {};
+// set-up exports
+#if defined(WIN32) || defined(_WIN32)
+#else
+#define EXPORT
+#endif
 
 // print out name and val for each col on the row
-static int row_callback(int numCols, char **valEachCol, char **azColName)
+EXPORT static int row_callback(int numCols, char **valEachCol, char **azColName)
 {
     for (int i = 0; i < numCols; i++)
     {
@@ -28,7 +26,8 @@ int main(int argc, char **argv)
     // return code
     int rc;
     char *sql;
-    char *tableName = "test_table";
+    char *userTableName = "test_table";
+    char *todoTableName = "test_table";
 
     // open db connection
     rc = sqlite3_open("test_Cqlite.db", &db);
@@ -40,7 +39,7 @@ int main(int argc, char **argv)
     }
 
     // grab table and free mem routine
-    sql = sqlite3_mprintf("SELECT name FROM sqlite_master WHERE type='table' AND name='%q';", tableName);
+    sql = sqlite3_mprintf("SELECT name FROM sqlite_master WHERE type='table' AND name='%q';", userTableName);
     rc = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
     sqlite3_free(sql);
     if (rc != SQLITE_OK)
@@ -51,12 +50,12 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // check for changes in db
+    // check for changes in db - rows modified
     if (sqlite3_changes(db) == 0)
     {
         // create table
         // drill down on schema for use in other parts of app
-        //  "CREATE TABLE test_table 
+        //  "CREATE TABLE test_table
         //  (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         rc = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
@@ -67,11 +66,11 @@ int main(int argc, char **argv)
             sqlite3_close(db);
             return 1;
         }
-        printf("No changes, assuming table '%s' does not exist... has now been created successfully master weasel\n", tableName);
+        printf("No changes, assuming table '%s' does not exist... has now been created successfully master weasel\n", userTableName);
     }
     else
     {
-        printf("Table '%s' already exists master weasel!(assuming, actually)\n", tableName);
+        printf("Table '%s' already exists master weasel!(assuming, actually)\n", userTableName);
     }
 
     // insert data
@@ -86,8 +85,17 @@ int main(int argc, char **argv)
     {
         fprintf(stdout, "Data insert success master weasel\n");
     }
+    // TODO should create another table and join for acutal to-dos & notes?
+    sql = "CREATE TABLE IF NOT EXISTS todos ( \
+    id INTEGER PRIMARY KEY, \
+    owner_id INTEGER NOT NULL, \
+    title TEXT NOT NULL, \
+    completed INTEGER \
+    )";
+    // TODO continue with join logic on second table
+    // update tables etc
 
-    // select data
+    // show all data from table
     sql = "SELECT * FROM test_table";
     rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
@@ -96,10 +104,8 @@ int main(int argc, char **argv)
         sqlite3_free(zErrMsg);
     }
 
-    // remove entries with similar ids
+    // TODO remove entries with similar ids
     // DELETE FROM test_table WHERE age <= 200;
-
-    // other functionality?
 
     // final shutdown db
     sqlite3_close(db);

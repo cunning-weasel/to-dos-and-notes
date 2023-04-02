@@ -1,22 +1,16 @@
-import express, { Express, Request, Response } from "express";
+import express, { Request, Response } from "express";
 const router = express.Router();
-import {
-  getToDos,
-  auth,
-  addToDos,
-  deleteToDos,
-  updateToDos,
-} from "/controllers/mainApp_controller";
+import { get, post, put, remove } from "/controllers/mainApp_controller";
 
 router.get("/app", function (req: Request, res: Response) {
   res.render("mainApp");
 });
 
-router.route("/app").get(getToDos).post(auth, addToDos);
+router.route("/app").get(getToDos).post(addToDos);
 router
-  .route("/:id")  // email?
+  .route("/:id") // email?
   .get(getToDos)
-  .delete(auth, deleteToDos)
-  .put(auth, updateToDos);
+  .remove(deleteToDos)
+  .put(updateToDos);
 
 export default router;
