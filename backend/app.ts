@@ -5,10 +5,13 @@ import session from "express-session";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import cors from "cors";
 
 import usersRouter from "./routes/users";
 import mainAppRouter from "./routes/mainApp";
-import authRouter from "./routes/auth";
+import indexRouter from "./routes/index";
+
+// import SQLite_c_call from 'db/ whatever';
 
 dotenv.config();
 
@@ -25,6 +28,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 // session middleware
 app.use(
   session({
@@ -32,15 +36,14 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
-    // store: new SQLite_c_store({ db: 'whatever.db', dir: './var/db' })
-
+    // store: new SQLite_c_call({ db: 'whatever.db', dir: './var/db' })
   })
 );
 // passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 // routes
-app.use("/", authRouter); // base page - login/ register
+app.use("/", indexRouter); // base page - login/ register
 app.use("/", usersRouter);
 app.use("/", mainAppRouter);
 

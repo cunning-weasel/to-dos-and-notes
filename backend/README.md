@@ -1,12 +1,11 @@
 TO-DO's
 
 1. routes and endpoints: 
-    controllers: handle endpoints i.e login, logout, app page
-    middlewares: middleware functions i.e auth (email only - sendgrid) 
-    models: data models for app i.e User model for user data ?
-    utils: utility functions i.e encryption/decryption / errors ?
+    controllers: handle endpoints i.e app page
+    routes: 
+    services: 
 
-2. c functions for 
+2. business logic in c: 
     SQLite: id, user, to-do, note, date?, BLOB for img, email?
     encryption: encrypt to-dos, notes, dates, BLOB
     image processing with stb_image: add to SQLite db and send to FE
@@ -17,8 +16,11 @@ TO-DO's
     dedicated endpoint: ?
 
 5. create limited components and pages on FE
+    check how it works with template - maybe scrap FE
 
-6. axios servives, types, API calls 
+6. axios:
+    services good to go?
+    types interfaces set?
+    controllers set? 
     backend integration: https://vitejs.dev/guide/backend-integration.html
-
-7. retrieve processed images on frontend
+    retrieve processed images on frontend

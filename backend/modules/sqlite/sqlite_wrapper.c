@@ -7,8 +7,7 @@
 // #define EXPORT
 // #endif
 
-// EXPORT int32_t c_fib(int x)
-// {};
+// EXPORT c_func(int x) {};
 
 // print out name and val for each col on the row
 static int row_callback(int numCols, char **valEachCol, char **azColName)
@@ -76,8 +75,8 @@ int main(int argc, char **argv)
     }
 
     // insert data
-    const char *insert_data_sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
-    rc = sqlite3_exec(db, insert_data_sql, row_callback, 0, &zErrMsg);
+    sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
+    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
     {
         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
@@ -89,8 +88,8 @@ int main(int argc, char **argv)
     }
 
     // select data
-    const char *select_data_sql = "SELECT * FROM test_table";
-    rc = sqlite3_exec(db, select_data_sql, row_callback, 0, &zErrMsg);
+    sql = "SELECT * FROM test_table";
+    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
     {
         fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
@@ -99,6 +98,8 @@ int main(int argc, char **argv)
 
     // remove entries with similar ids
     // DELETE FROM test_table WHERE age <= 200;
+
+    // other functionality?
 
     // final shutdown db
     sqlite3_close(db);
