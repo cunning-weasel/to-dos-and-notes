@@ -7,7 +7,7 @@ import nodemailer from "nodemailer";
 passport.use(
   new MagicLinkStrategy(
     {
-      secret: "keyboard cat",
+      secret: process.env.SESSION_SECRET,
       userFields: ["email"],
       tokenField: "token",
       verifyUserAfterToken: true,

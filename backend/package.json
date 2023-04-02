@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express-session": "^1.17.3",
+    "express-validator": "^6.15.0",
     "ffi-napi": "^4.0.3",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
