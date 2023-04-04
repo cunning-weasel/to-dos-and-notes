@@ -2,13 +2,13 @@
 #include <sqlite3.h>
 
 // set-up exports
-#if defined(WIN32) || defined(_WIN32)
-#else
-#define EXPORT
-#endif
+// #if defined(WIN32) || defined(_WIN32)
+// #else
+// #define EXPORT
+// #endif
 
 // print out name and val for each col on the row
-EXPORT static int row_callback(int numCols, char **valEachCol, char **azColName)
+static int row_callback(int numCols, char **valEachCol, char **azColName)
 {
     for (int i = 0; i < numCols; i++)
     {
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
     int rc;
     char *sql;
     char *userTableName = "test_table";
-    char *todoTableName = "test_table";
+    char *todoTableName = "test_table_to-do";
 
     // open db connection
     rc = sqlite3_open("test_Cqlite.db", &db);
@@ -55,8 +55,6 @@ int main(int argc, char **argv)
     {
         // create table
         // drill down on schema for use in other parts of app
-        //  "CREATE TABLE test_table
-        //  (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
         rc = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
         if (rc != SQLITE_OK)
@@ -75,7 +73,7 @@ int main(int argc, char **argv)
 
     // insert data
     sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
-    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    rc = sqlite3_exec(db, sql, row_callback, NULL, &zErrMsg);
     if (rc != SQLITE_OK)
     {
         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
@@ -86,12 +84,12 @@ int main(int argc, char **argv)
         fprintf(stdout, "Data insert success master weasel\n");
     }
     // TODO should create another table and join for acutal to-dos & notes?
-    sql = "CREATE TABLE IF NOT EXISTS todos ( \
-    id INTEGER PRIMARY KEY, \
-    owner_id INTEGER NOT NULL, \
-    title TEXT NOT NULL, \
-    completed INTEGER \
-    )";
+    // sql = "CREATE TABLE IF NOT EXISTS todos ( \
+    // id INTEGER PRIMARY KEY, \
+    // owner_id INTEGER NOT NULL, \
+    // title TEXT NOT NULL, \
+    // completed INTEGER \
+    // )";
     // TODO continue with join logic on second table
     // update tables etc
 
@@ -112,8 +110,7 @@ int main(int argc, char **argv)
     return 0;
 };
 
-// terminal command for compiling and linking code with sqlite3 lib
-// compile: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
+// compile and link: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
 // run comiled file: ./output_sqlite_wrapper
 
 // install sqlite stuff linux

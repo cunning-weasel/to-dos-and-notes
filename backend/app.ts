@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
 
-import usersRouter from "./routes/users";
+import userRouter from "./routes/user";
 import mainAppRouter from "./routes/mainApp";
 import indexRouter from "./routes/index";
 
@@ -20,7 +20,7 @@ const port: string = process.env.PORT;
 
 // view engine
 app.set("view engine", "pug");
-// set the path to your views directory
+// set path to views directory
 app.set("views", path.join(__dirname, "public", "pug"));
 
 // middleware
@@ -44,7 +44,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 // routes
 app.use("/", indexRouter); // base page - login/ register
-app.use("/", usersRouter);
+app.use("/", userRouter);
 app.use("/", mainAppRouter);
 
 app.listen(port, () => {

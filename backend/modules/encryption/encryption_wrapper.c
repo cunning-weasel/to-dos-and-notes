@@ -3,7 +3,7 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
-// one way to handle errors instead of goto:
+// one way to handle errors instead of goto?
 // typedef struct encryption_op_t
 // {
 //     char *data;
