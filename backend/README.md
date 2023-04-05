@@ -8,9 +8,9 @@ TO-DO's
     middleware: basic cors, security, ?
 
 2. modules in c & interfaces: 
-    SQLite: id, user, to-do's and notes seperate table?, date?, BLOB for img, email?
-    encryption: encrypt to-dos, notes, dates, BLOB
-    image processing with stb_image: add to SQLite db and send to FE
+    SQLite: id, user, to-do's and notes seperate table?, date?, 
+    encryption: encrypt to-dos, notes, dates, BLOB, connection?
+    image processing with stb_image: process, store of filesystem, add pointers to db?
 
 3. expose functions to node-ffi module to load and call c from Express
 
@@ -26,3 +26,5 @@ TO-DO's
     controllers set? 
     backend integration: https://vitejs.dev/guide/backend-integration.html
     retrieve processed images on frontend
+
+

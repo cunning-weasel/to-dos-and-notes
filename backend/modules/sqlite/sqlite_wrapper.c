@@ -20,7 +20,6 @@ static int row_callback(int numCols, char **valEachCol, char **azColName)
 
 int main(int argc, char **argv)
 {
-    // store connection to sqlite in pointer to var db
     sqlite3 *db;
     char *zErrMsg = 0;
     // return code
@@ -73,7 +72,7 @@ int main(int argc, char **argv)
 
     // insert data
     sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
-    rc = sqlite3_exec(db, sql, row_callback, NULL, &zErrMsg);
+    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (rc != SQLITE_OK)
     {
         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
@@ -83,7 +82,7 @@ int main(int argc, char **argv)
     {
         fprintf(stdout, "Data insert success master weasel\n");
     }
-    // TODO should create another table and join for acutal to-dos & notes?
+    // TODO should create another table and join for to-dos & notes?
     // sql = "CREATE TABLE IF NOT EXISTS todos ( \
     // id INTEGER PRIMARY KEY, \
     // owner_id INTEGER NOT NULL, \

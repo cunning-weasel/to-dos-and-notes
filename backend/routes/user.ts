@@ -1,12 +1,8 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 
-/* GET users listing. */
-router.get("/user", function (req: Request, res: Response) {
-  // res.send("rename - might not need?");
+router.get("/user", function (req: Request, res: Response, next: NextFunction) {
   res.render("profile");
-
 });
 
 export default router;
-
