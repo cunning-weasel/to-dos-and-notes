@@ -8,7 +8,7 @@
 // #endif
 
 // print out name and val for each col on the row
-static int row_callback(int numCols, char **valEachCol, char **azColName)
+static int row_callback(void *NOT_USED, int numCols, char **valEachCol, char **azColName)
 {
     for (int i = 0; i < numCols; i++)
     {
