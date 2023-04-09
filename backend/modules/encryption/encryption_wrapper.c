@@ -99,3 +99,5 @@ err:
 
 // compile: gcc -o encryp_wrapper encryp_wrapper.c -lcrypto
 // run ./ecryp_wrapper
+
+// docs: https://www.openssl.org/docs/man3.0/man7/crypto.html

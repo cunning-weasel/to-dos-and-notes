@@ -8,7 +8,7 @@
 // #endif
 
 // print out name and val for each col on the row
-static int row_callback(void *NOT_USED, int numCols, char **valEachCol, char **azColName)
+static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
 {
     for (int i = 0; i < numCols; i++)
     {
@@ -22,15 +22,14 @@ int main(int argc, char **argv)
 {
     sqlite3 *db;
     char *zErrMsg = 0;
-    // return code
-    int rc;
+    int return_code;
     char *sql;
     char *userTableName = "test_table";
     char *todoTableName = "test_table_to-do";
 
     // open db connection
-    rc = sqlite3_open("test_Cqlite.db", &db);
-    if (rc != SQLITE_OK)
+    return_code = sqlite3_open("test_Cqlite.db", &db);
+    if (return_code != SQLITE_OK)
     {
         fprintf(stderr, "Can't open Db master weasel: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
@@ -39,9 +38,9 @@ int main(int argc, char **argv)
 
     // grab table and free mem routine
     sql = sqlite3_mprintf("SELECT name FROM sqlite_master WHERE type='table' AND name='%q';", userTableName);
-    rc = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
+    return_code = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
     sqlite3_free(sql);
-    if (rc != SQLITE_OK)
+    if (return_code != SQLITE_OK)
     {
         fprintf(stderr, "error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
@@ -55,8 +54,8 @@ int main(int argc, char **argv)
         // create table
         // drill down on schema for use in other parts of app
         sql = "CREATE TABLE test_table (id integer NOT NULL, name text NOT NULL, userPreference text NOT NULL, length integer NOT NULL);";
-        rc = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
-        if (rc != SQLITE_OK)
+        return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+        if (return_code != SQLITE_OK)
         {
             fprintf(stderr, "SQL create table error master weasel: %s\n", zErrMsg); // should throw sqlite error right?
             sqlite3_free(zErrMsg);
@@ -72,8 +71,8 @@ int main(int argc, char **argv)
 
     // insert data
     sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
-    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK)
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
     {
         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
@@ -94,8 +93,8 @@ int main(int argc, char **argv)
 
     // show all data from table
     sql = "SELECT * FROM test_table";
-    rc = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK)
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
     {
         fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
@@ -114,3 +113,5 @@ int main(int argc, char **argv)
 
 // install sqlite stuff linux
 // sudo apt-get install sqlite3 libsqlite3-dev
+
+// docs: https://www.sqlite.org/quickstart.html
