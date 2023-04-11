@@ -6,6 +6,7 @@
 
 int main(int argc, char *argv[])
 {
+    // as usual, test on terminal first
     if (argc < 2)
     {
         printf("Usage: %s <image_file>\n", argv[0]);
@@ -28,10 +29,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    SDL_Window *win = SDL_CreateWindow("Image Viewer",
-                                       SDL_WINDOWPOS_UNDEFINED,
-                                       SDL_WINDOWPOS_UNDEFINED,
-                                       width, height, 0);
+    SDL_Window *win = SDL_CreateWindow("Image Viewer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0);
     if (win == NULL)
     {
         printf("SDL_CreateWindow Error: %s", SDL_GetError());
@@ -45,9 +43,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    SDL_Texture *tex = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888,
-                                         SDL_TEXTUREACCESS_STREAMING,
-                                         width, height);
+    SDL_Texture *tex = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, width, height);
     if (tex == NULL)
     {
         printf("SDL_CreateTexture Error: %s", SDL_GetError());
@@ -75,3 +71,4 @@ int main(int argc, char *argv[])
 // gcc -o image_viewer image_viewer.c -lSDL2 -lm -lstb_image
 
 // docs: https://github.com/nothings/stb/blob/master/stb_image.h
+// https://github.com/libsdl-org/SDL/tree/main/docs

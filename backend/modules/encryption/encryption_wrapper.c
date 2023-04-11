@@ -84,8 +84,8 @@ int main(void)
     BIO_dump_fp(stdout, outdigest, len);
 
     ret = 0;
-// if there are errors in the above process .... ->
-err:
+    // if there are errors in the above process .... ->
+    err:
     /* Clean up all the resources we allocated */
     OPENSSL_free(outdigest);
     EVP_MD_free(sha256);
