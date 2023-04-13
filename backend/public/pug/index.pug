@@ -10,12 +10,12 @@ html
   body
     h1.border.center pug meets weasel on Express
     h2.center#pug-success-message
-    | page is being rendered from Pug into HTML master weasel!
+    | page rendered from Pug into HTML master weasel!
     | #{title}
     p#pug-variable=message
     
       hr
-      h2.center Login Form
+      h2.center Login
       form(action='/app', method='post').center
         div
           label email:
@@ -24,7 +24,7 @@ html
           input(type='submit', value='Log In')
 
       hr
-      h2.center Registration Form
+      h2.center Sign-up
       form(action='/register', method='post').center
         div
           label email:

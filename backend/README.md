@@ -27,4 +27,3 @@ TO-DO's
     backend integration: https://vitejs.dev/guide/backend-integration.html
     retrieve processed images on frontend
 
-
