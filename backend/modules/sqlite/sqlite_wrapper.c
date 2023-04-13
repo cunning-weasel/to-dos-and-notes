@@ -18,7 +18,7 @@ static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **az
     return 0;
 };
 
-int main(int argc, char **argv)
+int main()
 {
     sqlite3 *db;
     char *zErrMsg = 0;
