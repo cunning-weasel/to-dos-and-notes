@@ -3,29 +3,11 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
-// one way to handle errors instead of goto?
-// typedef struct encryption_op_t
-// {
-//     char *data;
-//     isize_t size;
-//     valid_t valid;
-// } encryption_op_t;
-
-// encryption_op_t do_encryption_op(char *);
-
-// encryption_op_t doThing = do_encryption_op("text");
-
-// if (doThing.valid)
-// {
-//     return;
-// }
-
 int main(void)
 {
     EVP_MD_CTX *ctx = NULL;
     EVP_MD *sha256 = NULL;
-    const unsigned char msg[] = {
-        0x00, 0x01, 0x02, 0x03};
+    const unsigned char msg[] = {0x00, 0x01, 0x02, 0x03};
     unsigned int len = 0;
     unsigned char *outdigest = NULL;
     int ret = 1;
@@ -43,7 +25,7 @@ int main(void)
      * we're not supplying any particular search criteria for our SHA256
      * implementation (second NULL parameter). Any SHA256 implementation will
      * do.
-     * In a larger application this fetch would just be done once, and could
+     * Fetch should just be done once, and could
      * be used for multiple calls to other operations such as EVP_DigestInit_ex().
      */
     sha256 = EVP_MD_fetch(NULL, "SHA256", NULL);
@@ -84,8 +66,8 @@ int main(void)
     BIO_dump_fp(stdout, outdigest, len);
 
     ret = 0;
-    // if there are errors in the above process .... ->
-    err:
+// if there are errors in the above process .... ->
+err:
     /* Clean up all the resources we allocated */
     OPENSSL_free(outdigest);
     EVP_MD_free(sha256);
