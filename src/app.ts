@@ -11,7 +11,7 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-// import SQLite_c_call from 'db/ whatever';
+// import SQLite_c_call from '/models/db';
 
 dotenv.config();
 
@@ -46,7 +46,7 @@ app.use(
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
-    // store: new SQLite_c_call({ db: 'whatever.db', dir: './var/db' })
+    // store: new SQLite_c_call({ db: 'whatever.db', dir: '/models/db' })
   })
 );
 // passport middleware
@@ -62,3 +62,5 @@ app.listen(port, () => {
 });
 
 export default app;
+
+// compile with tsc in root

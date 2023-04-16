@@ -5,7 +5,7 @@ const validateInputs = (rules) => {
     return [
         ...rules,
         (req, res, next) => {
-            const errors = express_validator_1.validationResult(req);
+            const errors = (0, express_validator_1.validationResult)(req);
             if (errors.isEmpty()) {
                 return next();
             }

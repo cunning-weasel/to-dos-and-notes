@@ -14,18 +14,18 @@ const cors_1 = __importDefault(require("cors"));
 const profile_1 = __importDefault(require("./routes/profile"));
 const app_1 = __importDefault(require("./routes/app"));
 const index_1 = __importDefault(require("./routes/index"));
-// import SQLite_c_call from 'db/ whatever';
+// import SQLite_c_call from '/models/db';
 dotenv_1.default.config();
-const app = express_1.default();
+const app = (0, express_1.default)();
 const port = process.env.PORT;
 // view engine
 app.set("views", path_1.default.join(__dirname, "views"));
 app.set("view engine", "pug");
 // middleware
-app.use(morgan_1.default("dev"));
+app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
-app.use(cookie_parser_1.default());
-app.use(cors_1.default());
+app.use((0, cookie_parser_1.default)());
+app.use((0, cors_1.default)());
 app.use(express_1.default.urlencoded({ extended: false }));
 // middleware for serving static files (CSS, images, etc.)
 app.use("/public", express_1.default.static(path_1.default.join(__dirname, "public"), {
@@ -36,11 +36,12 @@ app.use("/public", express_1.default.static(path_1.default.join(__dirname, "publ
     },
 }));
 // session middleware
-app.use(express_session_1.default({
+app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: { secure: false },
+    // store: new SQLite_c_call({ db: 'whatever.db', dir: '/models/db' })
 }));
 // passport middleware
 app.use(passport_1.default.initialize());
@@ -53,3 +54,4 @@ app.listen(port, () => {
     console.log(`⚡️[weasel-server.ts]: running @ http://localhost:${port}`);
 });
 exports.default = app;
+// compile with tsc in root

@@ -1,24 +1,23 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const sqlite_wrapper_1 = __importDefault(require("../modules/sqlite/sqlite_wrapper"));
-sqlite_wrapper_1.default.serialize(function () {
-    sqlite_wrapper_1.default.run("CREATE TABLE IF NOT EXISTS users ( \
-    id INTEGER PRIMARY KEY, \
-    username TEXT UNIQUE, \
-    hashed_image BLOB, \
-    salt BLOB, \
-    name TEXT, \
-    email TEXT UNIQUE, \
-    email_verified INTEGER \
-  )");
-    sqlite_wrapper_1.default.run("CREATE TABLE IF NOT EXISTS todos ( \
-    id INTEGER PRIMARY KEY, \
-    owner_id INTEGER NOT NULL, \
-    title TEXT NOT NULL, \
-    completed INTEGER \
-  )");
-});
-exports.default = sqlite_wrapper_1.default;
+// import create_table_db from "../modules/sqlite/sqlite_wrapper";
+// create_table_db.serialize(function () {
+//   create_table_db.run(
+//     "CREATE TABLE IF NOT EXISTS users ( \
+//     id INTEGER PRIMARY KEY, \
+//     username TEXT UNIQUE, \
+//     hashed_image BLOB, \
+//     salt BLOB, \
+//     name TEXT, \
+//     email TEXT UNIQUE, \
+//     email_verified INTEGER \
+//   )"
+//   );
+//   create_table_db.run(
+//     "CREATE TABLE IF NOT EXISTS todos ( \
+//     id INTEGER PRIMARY KEY, \
+//     owner_id INTEGER NOT NULL, \
+//     title TEXT NOT NULL, \
+//     completed INTEGER \
+//   )"
+//   );
+// });
+// export default create_table_db;
