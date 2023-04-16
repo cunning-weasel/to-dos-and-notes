@@ -7,8 +7,8 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
 
-import userRouter from "./routes/user";
-import mainAppRouter from "./routes/mainApp";
+import profileRouter from "./routes/profile";
+import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
 // import SQLite_c_call from 'db/ whatever';
@@ -19,16 +19,26 @@ const app = express();
 const port: string = process.env.PORT;
 
 // view engine
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-// set path to views directory
-app.set("views", path.join(__dirname, "public", "pug"));
 
 // middleware
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
+// middleware for serving static files (CSS, images, etc.)
+app.use(
+  "/public",
+  express.static(path.join(__dirname, "public"), {
+    setHeaders: (res, path) => {
+      if (path.endsWith(".css")) {
+        res.setHeader("Content-Type", "text/css");
+      }
+    },
+  })
+);
 // session middleware
 app.use(
   session({
@@ -44,8 +54,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 // routes
 app.use("/", indexRouter); // base page - login/ register
-app.use("/", userRouter);
-app.use("/", mainAppRouter);
+app.use("/", profileRouter);
+app.use("/", appRouter);
 
 app.listen(port, () => {
   console.log(`⚡️[weasel-server.ts]: running @ http://localhost:${port}`);

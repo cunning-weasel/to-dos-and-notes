@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult } from 'express-validator';
+import { validationResult } from "express-validator";
 
-const validateInputs = (rules) => {
+const validateInputs = (rules: any) => {
   return [
     ...rules,
     (req: Request, res: Response, next: NextFunction) => {

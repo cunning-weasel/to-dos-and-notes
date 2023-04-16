@@ -6,6 +6,7 @@
 // #else
 // #define EXPORT
 // #endif
+// ... then export the c func - EXPORT type c_func(int x){};
 
 // print out name and val for each col on the row
 static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
