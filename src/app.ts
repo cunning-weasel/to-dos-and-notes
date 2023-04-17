@@ -6,6 +6,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
+import helmet from "helmet";
 
 import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
@@ -14,7 +15,6 @@ import indexRouter from "./routes/index";
 // import SQLite_c_call from '/models/db';
 
 dotenv.config();
-
 const app = express();
 const port: string = process.env.PORT;
 
@@ -23,6 +23,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 // middleware
+app.use(helmet());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(cookieParser());

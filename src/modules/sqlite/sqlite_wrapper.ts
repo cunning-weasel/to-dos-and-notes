@@ -13,6 +13,7 @@ const c_funtion_op = ffi.Function("int", ["string", "pointer"]);
 export default c_funtion_op;
 
 // call the C function and handle the return value
+// i.e import c_funtion_op from "where-ever"
 const result: number = db_calls.c_sqlite3_close(42);
 if (result === 0) {
   console.log("C function call succeeded!");

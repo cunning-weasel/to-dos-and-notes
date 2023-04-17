@@ -15,6 +15,7 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.15.0",
     "ffi-napi": "^4.0.3",
+    "helmet": "^6.1.5",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },
@@ -24,6 +25,7 @@
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
     "@types/ffi-napi": "^4.0.7",
+    "@types/helmet": "^4.0.0",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.15.11",
     "@types/passport": "^1.0.12",
