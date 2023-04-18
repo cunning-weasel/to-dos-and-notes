@@ -25,8 +25,8 @@ int main()
     char *zErrMsg = 0;
     int return_code;
     char *sql;
-    char *userTableName = "test_table";
-    char *todoTableName = "test_table_to-do";
+    char *userTableName = "users";
+    char *todoTableName = "to-dos";
 
     // open db connection
     return_code = sqlite3_open("test_Cqlite.db", &db);
@@ -93,6 +93,9 @@ int main()
         fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+
+    // TODO
+    // PATCH/ PUT ops
 
     // TODO remove entries with similar ids
     // DELETE FROM test_table WHERE age <= 200;
