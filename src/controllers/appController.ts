@@ -1,34 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import auth_user from "../models/todos";
+import { getToDoById, getOwnerById, createToDo, updateToDo } from "../models/app";
 
-async function get(req: Request, res: Response, next: NextFunction) {
+export const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await auth_user.getMultiple(req.query.page));
+    res.json(await getToDoById(req.query.page));
   } catch (err) {
     console.error(`Error while getting to-do/ notes`, err.message);
     next(err);
   }
 }
 
-async function post(req: Request, res: Response, next: NextFunction) {
+export const post = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await auth_user.post(req.body));
+    res.json(await createToDo(req.body));
   } catch (err) {
     console.error(`Error while creating to-do/ note`, err.message);
     next(err);
   }
 }
 
-async function put(req: Request, res: Response, next: NextFunction) {
+export const patch = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json(await auth_user.put(req.params.id, req.body));
+    res.json(await updateToDo(req.params.id, req.body));
   } catch (err) {
     console.error(`Error while updating to-do/ note`, err.message);
     next(err);
   }
 }
 
-async function remove(req: Request, res: Response, next: NextFunction) {
+export const remove = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(await auth_user.remove(req.params.id));
   } catch (err) {
@@ -36,5 +36,3 @@ async function remove(req: Request, res: Response, next: NextFunction) {
     next(err);
   }
 }
-
-export default { get, post, put, remove };

@@ -3,6 +3,15 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
+// password encryption
+void encrypt(const char *input, char *output) {
+    // implementation of encryption algorithm
+}
+
+void decrypt(const char *input, char *output) {
+    // implementation of decryption algorithm
+}
+
 int main(void)
 {
     EVP_MD_CTX *ctx = NULL;

@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import passport from "passport";
+import LocalStrategy from 'passport-local';
 import session from "express-session";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -12,7 +13,8 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-// import SQLite_c_call from '/models/db';
+// import db from './models/app';
+// const { encryptPassword, comparePassword } = require('./my-c-encryption-functions');
 
 dotenv.config();
 const app = express();
@@ -40,7 +42,7 @@ app.use(
     },
   })
 );
-// session middleware
+// passport middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -50,9 +52,9 @@ app.use(
     // store: new SQLite_c_call({ db: 'whatever.db', dir: '/models/db' })
   })
 );
-// passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
 // routes
 app.use("/", indexRouter); // base page - login/ register
 app.use("/", profileRouter);

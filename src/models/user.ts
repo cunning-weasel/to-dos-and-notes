@@ -1,15 +1,30 @@
-import create_table_users_db from "../modules/sqlite/sqlite_wrapper";
+import {
+  getUserByIdC,
+  getUserByUsernameC,
+  createUserC,
+  updateUserC,
+} from "./mylib/sqlite";
+import encryptPassword from "./mylib/encryption";
 
-create_table_users_db.run(
-  "CREATE TABLE IF NOT EXISTS users ( \
-      id INTEGER PRIMARY KEY, \
-      username TEXT UNIQUE, \
-      hashed_image BLOB, \
-      salt BLOB, \
-      name TEXT, \
-      email TEXT UNIQUE, \
-      email_verified INTEGER \
-    )"
-);
+export const getUserById = (id) => {
+  return getUserByIdC(id);
+};
 
-export default create_table_users_db;
+export const getUserByUsername = (username) => {
+  return getUserByUsernameC(username);
+};
+
+export const createUser = (user) => {
+  // encrypt the user's password before creating the user
+  user.password = encryptPassword(user.password);
+  return createUserC(user);
+};
+
+export const updateUser = (id, updates) => {
+  // encrypt the user's new password before updating the user
+  if (updates.password) {
+    updates.password = encryptPassword(updates.password);
+  }
+
+  return updateUserC(id, updates);
+};

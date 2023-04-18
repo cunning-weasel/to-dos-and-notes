@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include <sqlite3.h>
 
-// set-up exports
-// #if defined(WIN32) || defined(_WIN32)
-// #else
-// #define EXPORT
-// #endif
-// ... then export the c func - EXPORT type c_func(int x){};
-
 // print out name and val for each col on the row
 static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
 {
@@ -18,6 +11,21 @@ static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **az
     printf("\n");
     return 0;
 };
+
+// TODO
+// db.run("CREATE TABLE IF NOT EXISTS users ( \
+//   id INTEGER PRIMARY KEY, \
+//   username TEXT UNIQUE, \
+//   hashed_password BLOB, \
+//   salt BLOB \
+// )");
+
+// db.run("CREATE TABLE IF NOT EXISTS todos ( \
+//   id INTEGER PRIMARY KEY, \
+//   owner_id INTEGER NOT NULL, \
+//   title TEXT NOT NULL, \
+//   completed INTEGER \
+// )");
 
 int main()
 {
@@ -110,5 +118,8 @@ int main()
 
 // install sqlite stuff linux
 // sudo apt-get install sqlite3 libsqlite3-dev
+
+// compile to shared library for ffi call - no need to export
+// gcc -shared -o mylib.so sqlite.c encryption.c -lsqlite3
 
 // docs: https://www.sqlite.org/quickstart.html
