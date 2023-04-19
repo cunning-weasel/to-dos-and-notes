@@ -4,7 +4,7 @@ import {
   getUserByUsername,
   createUser,
   updateUser,
-} from "../models/user";
+} from "../models/encryption";
 
 export const get = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -36,12 +36,3 @@ export const patch = async (
     next(err);
   }
 };
-
-//   export const remove = async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       res.json(await auth_user.remove(req.params.id));
-//     } catch (err) {
-//       console.error(`Error while deleting to-do/ note`, err.message);
-//       next(err);
-//     }
-//   }

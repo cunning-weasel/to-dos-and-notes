@@ -3,13 +3,17 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
-// password encryption
+// encryption
 void encrypt(const char *input, char *output) {
     // implementation of encryption algorithm
     // https://www.openssl.org/docs/man3.1/man1/openssl-enc.html
 }
 
 void decrypt(const char *input, char *output) {
+    // implementation of decryption algorithm
+}
+
+void compare(const char *input, char *output) {
     // implementation of decryption algorithm
 }
 
