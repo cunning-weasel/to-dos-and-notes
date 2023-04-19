@@ -1,0 +1,124 @@
+body {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+}
+
+.border {
+  border-style: inset;
+  border-width: 1px;
+  margin: 10px;
+}
+
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div > input {
+  margin: 0.5rem;
+}
+
+.login {
+  border: solid 2px #777;
+  width: 50%;
+  background-color: aliceblue;
+}
+
+a.text {
+  text-decoration: none;
+  font-weight: 700;
+}
+
+form {
+  padding: 3px;
+  width: 500px;
+}
+
+form input {
+  background-color: aliceblue;
+  border: turquoise solid 2px;
+  padding: 10px;
+  width: 90%;
+  margin-right: 0.5%;
+}
+
+form button {
+  width: 9%;
+  background: coral;
+  border: none;
+  padding: 10px;
+}
+
+#messages {
+  list-style-type: none;
+  text-align: left;
+  margin: 0;
+  padding: 0;
+  height: 20em;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+#messages li {
+  padding: 5px 10px;
+}
+
+#messages li:nth-child(odd) {
+  background: #eee;
+}
+
+/* vanilla media querries suck */
+/* small devices (phones) */
+@media only screen and (max-width: 600px) {
+  .login {
+    width: 90%;
+  }
+
+  form {
+    width: 90%;
+  }
+
+  form input {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  form button {
+    width: 100%;
+  }
+
+  #messages {
+    height: 10em;
+  }
+}
+
+/* medium devices (tablets) */
+@media only screen and (max-width: 992px) {
+  .login {
+    width: 70%;
+  }
+
+  form {
+    width: 70%;
+  }
+
+  #messages {
+    height: 15em;
+  }
+}
+
+/* large devices (desktops) */
+@media only screen and (min-width: 1200px) {
+  .login {
+    width: 50%;
+  }
+
+  form {
+    width: 50%;
+  }
+
+  #messages {
+    height: 20em;
+  }
+}
