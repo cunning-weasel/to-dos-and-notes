@@ -12,6 +12,14 @@ export const encrypt = (user) => {
   return user.password(user);
 };
 
+export const comparePassword = (id, updates) => {
+  if (id.password) {
+    updates.password = encryption_lib.compare(id, updates.password);
+  }
+
+  return updates.password(id, updates);
+};
+
 export const decrypt = (id, updates) => {
   if (updates.password) {
     updates.password = encryption_lib.decrypt(id, updates.password);

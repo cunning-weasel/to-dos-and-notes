@@ -14,7 +14,7 @@ void decrypt(const char *input, char *output) {
 }
 
 void compare(const char *input, char *output) {
-    // implementation of decryption algorithm
+    // implementation of compare algorithm
 }
 
 int main(void)

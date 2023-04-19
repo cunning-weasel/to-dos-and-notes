@@ -7,12 +7,11 @@ const db = ffi.Library("/sqlite/output_sqlite_libc.so", {
   Cqlite3_open: ["int", ["string", "pointer"]],
   Cqlite3_close: ["int", ["int"]],
   GetToDo_By_Id: ["int", ["int"]],
-
   // ...
 });
 
 // call the C function and handle the return value
-const openDb: number = (id: number) => {
+const openDb: number = (id) => {
   return db.Cqlite3_open(id);
 };
 
