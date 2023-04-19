@@ -7,31 +7,9 @@ import {
 } from "../models/db";
 
 // user data
-export const getUserById = async (id: string) => {
-  return getUserByIdC(id);
-};
-
-export const getUserByUsername = async (username: string) => {
-  return getUserByUsernameC(username);
-};
-
-export const createUser = async (user) => {
-  // encrypt the user's password before creating the user
-  user.password = encryption_lib.encrypt(user.password, user.something);
-  return createUserC(user);
-};
-
-export const updateUser = async (id, updates) => {
-  // encrypt the user's new password before updating the user
-  if (updates.password) {
-    updates.password = encryption_lib.encrypt(id, updates.password);
-  }
-
-  return updateUserC(id, updates);
-};
 
 // todo/ note data
-export const get = async (req: Request, res: Response, next: NextFunction) => {
+export const getToDo = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(await getToDoById(req.query.page));
   } catch (err) {
@@ -40,7 +18,7 @@ export const get = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const post = async (req: Request, res: Response, next: NextFunction) => {
+export const postToDO = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json(await createToDo(req.body));
   } catch (err) {
@@ -49,7 +27,7 @@ export const post = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const patch = async (
+export const patchToDo = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -62,7 +40,7 @@ export const patch = async (
   }
 };
 
-export const remove = async (
+export const removeToDo = async (
   req: Request,
   res: Response,
   next: NextFunction
