@@ -1,10 +1,11 @@
 import ffi from "ffi-napi";
 
-const encryption_lib = ffi.Library("./encryption_lib.so", {
+const encryption_lib = ffi.Library("./modules/encryption_lib.so", {
   encrypt: ["void", ["string", "string"]],
   decrypt: ["void", ["string", "string"]],
   compare: ["void", ["string", "string"]],
   // ...
+  // general connection stuff?
 });
 
 export const encrypt = (user) => {

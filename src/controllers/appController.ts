@@ -1,15 +1,19 @@
 import { Request, Response, NextFunction } from "express";
+
+import { getToDoById, createToDo, updateToDo } from "../models/db";
 import {
-  getToDoById,
-  getOwnerById,
-  createToDo,
-  updateToDo,
-} from "../models/db";
+  comparePassword,
+  // token? here usually jwt?
+} from "../models/encryption";
 
 // user data
 
 // todo/ note data
-export const getToDo = async (req: Request, res: Response, next: NextFunction) => {
+export const getToDo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     res.json(await getToDoById(req.query.page));
   } catch (err) {
@@ -18,7 +22,11 @@ export const getToDo = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export const postToDO = async (req: Request, res: Response, next: NextFunction) => {
+export const postToDO = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     res.json(await createToDo(req.body));
   } catch (err) {
@@ -46,7 +54,7 @@ export const removeToDo = async (
   next: NextFunction
 ) => {
   try {
-    res.json(await auth_user.remove(req.params.id));
+    res.json(await removeToDo(req.params.id));
   } catch (err) {
     console.error(`Error while deleting to-do/ note`, err.message);
     next(err);

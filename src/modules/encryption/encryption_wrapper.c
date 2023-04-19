@@ -3,17 +3,27 @@
 #include <openssl/bio.h>
 #include <openssl/err.h>
 
+// TODO
+// encryption/ ciphers, token, sha25
+
 // encryption
-void encrypt(const char *input, char *output) {
+void encrypt(const char *input, char *output)
+{
     // implementation of encryption algorithm
     // https://www.openssl.org/docs/man3.1/man1/openssl-enc.html
+    // Encrypt a file then base64 encode it (so it can be sent via
+    // mail for example) using AES-256 in CTR mode and PBKDF2 key derivation:
+    // openssl enc -aes-256-ctr -pbkdf2 -a -in file.txt -out file.aes256
 }
 
-void decrypt(const char *input, char *output) {
+void decrypt(const char *input, char *output)
+{
     // implementation of decryption algorithm
+    // openssl enc -aes-256-ctr -pbkdf2 -d -a -in file.aes256 -out file.txt -pass file:<passfile>
 }
 
-void compare(const char *input, char *output) {
+void compare(const char *input, char *output)
+{
     // implementation of compare algorithm
 }
 

@@ -12,21 +12,74 @@ static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **az
     return 0;
 };
 
-// TODO
-// db.run("CREATE TABLE IF NOT EXISTS users ( \
-//   id INTEGER PRIMARY KEY, \
-//   username TEXT UNIQUE, \
-//   hashed_password BLOB, \
-//   salt BLOB \
-// )");
+int open_db(const char *filename, sqlite3 **db)
+{
+    int return_code = sqlite3_open(*filename, db);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "Can't open_db master weasel: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return (0);
+    }
+    return 1;
+}
 
-// db.run("CREATE TABLE IF NOT EXISTS todos ( \
-//   id INTEGER PRIMARY KEY, \
-//   owner_id INTEGER NOT NULL, \
-//   title TEXT NOT NULL, \
-//   completed INTEGER \
-// )");
+int close_db(sqlite3 *db)
+{
+    return sqlite3_close(db);
+}
 
+// users
+void create_users_table(sqlite3 *db, const char *sql, char **zErrMsg)
+{
+    char sql = "CREATE TABLE IF NOT EXISTS users ( \
+  id INTEGER PRIMARY KEY, \
+  username TEXT UNIQUE, \
+  hashed_password BLOB, \
+  salt BLOB \
+);";
+
+    int return_code = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL create table error master weasel: %s\n", zErrMsg); // should throw sqlite error right?
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
+    }
+    else
+    {
+        printf("Table '%s' already exists master weasel!(assuming)\n", userTableName);
+    }
+}
+
+// todos
+void create_todos_table(sqlite3 *db, const char *sql, char **zErrMsg)
+{
+    char sql = "CREATE TABLE IF NOT EXISTS todos ( \
+  id INTEGER PRIMARY KEY, \
+  owner_id INTEGER NOT NULL, \
+  title TEXT NOT NULL, \
+  completed INTEGER \
+);";
+
+    int return_code = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL create table error master weasel: %s\n", zErrMsg); // should throw sqlite error right?
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
+    }
+    else
+    {
+        printf("Table '%s' already exists master weasel!(assuming)\n", todoTableName);
+    }
+}
+
+void insert_todo() {}
+
+// OG compiled code
 int main()
 {
     sqlite3 *db;
@@ -40,7 +93,7 @@ int main()
     return_code = sqlite3_open("test_Cqlite.db", &db);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "Can't open Db master weasel: %s\n", sqlite3_errmsg(db));
+        fprintf(stderr, "Can't open_db master weasel: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return (1); // status code of 1
     }
@@ -105,8 +158,7 @@ int main()
     // TODO
     // PATCH/ PUT ops
 
-    // TODO remove entries with similar ids
-    // DELETE FROM test_table WHERE age <= 200;
+    // TODO remove entries
 
     // final shutdown db
     sqlite3_close(db);
