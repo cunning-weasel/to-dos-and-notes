@@ -8,21 +8,6 @@ const db = ffi.Library("/sqlite/output_sqlite_libc.so", {
   Cqlite3_close: ["int", ["int"]],
 });
 
-// add to c code
-// db.run("CREATE TABLE IF NOT EXISTS users ( \
-//   id INTEGER PRIMARY KEY, \
-//   username TEXT UNIQUE, \
-//   hashed_password BLOB, \
-//   salt BLOB \
-// )");
-
-// db.run("CREATE TABLE IF NOT EXISTS todos ( \
-//   id INTEGER PRIMARY KEY, \
-//   owner_id INTEGER NOT NULL, \
-//   title TEXT NOT NULL, \
-//   completed INTEGER \
-// )");
-
 export const getToDoById = (id) => {
   return getToDoByIdC(id);
 };
