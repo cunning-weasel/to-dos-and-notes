@@ -1,10 +1,4 @@
 import ffi from "ffi-napi";
- {
-  getToDoByIdC,
-  getOwnerByIdC,
-  createToDoC,
-  updateToDoC,
-} from "./mylib/sqlite";
 import encryptPassword from "./mylib/encryption";
 
 // c function signature
@@ -13,8 +7,6 @@ const db = ffi.Library("/sqlite/output_sqlite_libc.so", {
   //   Cqlite3_open: ["int", ["string", "pointer"]],
   Cqlite3_close: ["int", ["int"]],
 });
-
-export default db;
 
 // add to c code
 // db.run("CREATE TABLE IF NOT EXISTS users ( \
