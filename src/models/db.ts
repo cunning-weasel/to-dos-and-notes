@@ -4,25 +4,25 @@ import { encrypt } from "./encryption";
 // function signatures
 const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   //   note to self - function returns an int and takes two args, a string and a pointer: ["int", ["string", "pointer"]]
-  open_db_c: ["int", ["string", "pointer"]],
-  close_db_c: ["string", ["string"]],
+  // open_db: ["int", ["string", "pointer"]],
+  open_db: ["int", ["void"]],
+  close_db: ["void", ["void"]],
   // create table users
-  // 
+  //
   // create table todos
 
   // user ops
-  // ...
+  username_check: ["int", ["string"]],
   // todo ops
   // ..
-  GetToDo_By_Id: ["int", ["int"]],
 });
 
-export const openDb = (id: string, ptr: any): number => {
-  return db_lib.open_db_c(id, ptr);
+export const openDb = (): number => {
+  return db_lib.open_db();
 };
 
-export const closeDb = (id: string): string => {
-  return db_lib.close_db_c(id);
+export const closeDb = () => {
+  return db_lib.close_db();
 };
 
 export const getToDoById = (ownerId: number): number => {
@@ -31,16 +31,19 @@ export const getToDoById = (ownerId: number): number => {
 
 export const createToDo = (user) => {
   user.password = encrypt(user.password);
-  return db_lib.create_to_do_c(user);
+  return db_lib.create_to_do(user);
 };
 
 export const updateToDo = (id, updates) => {
   // encrypt
   if (updates.password) {
-    updates.password = encrypt(updates.password);
+    return encrypt(id, updates);
   }
-
-  return update_to_do_c(id, updates);
 };
 
-// create an initial user (username: alice, password: letmein) with added salt
+export const checkUserName = (username: string): number => {
+  return db_lib.username_check(username);
+};
+
+// TODO
+// create initial user with hashed password

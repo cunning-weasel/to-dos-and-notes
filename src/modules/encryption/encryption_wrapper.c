@@ -4,7 +4,8 @@
 #include <openssl/err.h>
 
 // TODO
-// encryption/ ciphers, token, sha25
+// fetches
+// encryption/ ciphers, token, sha25 - done-ish
 
 // encryption
 void encrypt(const char *input, char *output)
@@ -14,6 +15,9 @@ void encrypt(const char *input, char *output)
     // Encrypt a file then base64 encode it (so it can be sent via
     // mail for example) using AES-256 in CTR mode and PBKDF2 key derivation:
     // openssl enc -aes-256-ctr -pbkdf2 -a -in file.txt -out file.aes256
+
+    // js functions expect a return - function need to handle all logic
+
 }
 
 void decrypt(const char *input, char *output)
@@ -22,11 +26,12 @@ void decrypt(const char *input, char *output)
     // openssl enc -aes-256-ctr -pbkdf2 -d -a -in file.aes256 -out file.txt -pass file:<passfile>
 }
 
-void compare(const char *input, char *output)
+char compare(const char *input, char *output)
 {
     // implementation of compare algorithm
 }
 
+// sha256 implementation
 int main(void)
 {
     EVP_MD_CTX *ctx = NULL;

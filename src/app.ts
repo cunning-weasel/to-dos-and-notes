@@ -50,7 +50,7 @@ app.use(
     saveUninitialized: false, // don't create session until something stored
     // cookie: { secure: false },
     // c func below 👇
-    store: openDb(process.env.DB_NAME, 1),
+    // store: openDb(),
   })
 );
 app.use(passport.initialize());
@@ -58,6 +58,7 @@ app.use(passport.session());
 // define a passport strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
+    if (openDb()) {
     try {
       // c func below 👇
       const user = await getUserByUsername(username);
@@ -78,6 +79,10 @@ passport.use(
     } catch (err) {
       return done(err);
     }
+  }
+  else {
+    console.error("db issue master weasel..?")
+  }
   })
 );
 // serialize and deserialize user
