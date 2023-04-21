@@ -21,7 +21,7 @@ char *todos_table = "to-dos";
 char *user_name = "";
 
 // open db connection and init schema
-int open_db()
+int open_db(void)
 {
     return_code = sqlite3_open("cunning-todos.db", &db);
     if (return_code != SQLITE_OK)
@@ -93,7 +93,7 @@ int insert_data()
     {
         fprintf(stdout, "Data insert success master weasel\n");
     }
-        return 0;
+    return 0;
 }
 
 // show table
@@ -106,7 +106,7 @@ int show_data()
         fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
-        return 0;
+    return 0;
 }
 
 // TODO remove entries

@@ -8,7 +8,6 @@
 
 int main(void)
 {
-
     // check if image exists first
     char *image_file = "weasel.jpeg";
     if (access(image_file, F_OK) != 0)
@@ -25,7 +24,6 @@ int main(void)
     // load the image using stb_image
     int width, height, num_channels;
     unsigned char *data = stbi_load(image_file, &width, &height, &num_channels, 0);
-
     if (!data)
     {
         printf("Error loading image %s\n", image_file);
@@ -86,7 +84,6 @@ int main(void)
 
 // gcc -o image_processing image_processing.c -lSDL2 -lm -I./ -DSTB_IMAGE_IMPLEMENTATION
 // ./image_processing weasel.jpeg
-
 
 // docs: https://github.com/nothings/stb/blob/master/stb_image.h
 // https://github.com/libsdl-org/SDL/tree/main/docs
