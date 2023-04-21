@@ -6,9 +6,8 @@
 
 #define IMAGE_DIR "backend/public/images/"
 
-int main(int argc, char *argv[])
+int main(void)
 {
-
     // check if image exists first
     char *image_file = "weasel.jpeg";
     if (access(image_file, F_OK) != 0)
@@ -25,7 +24,6 @@ int main(int argc, char *argv[])
     // load the image using stb_image
     int width, height, num_channels;
     unsigned char *data = stbi_load(image_file, &width, &height, &num_channels, 0);
-
     if (!data)
     {
         printf("Error loading image %s\n", image_file);
@@ -71,8 +69,8 @@ int main(int argc, char *argv[])
     SDL_RenderCopy(ren, tex, NULL, NULL);
     SDL_RenderPresent(ren);
 
-    // wait for 6 seconds before quitting
-    SDL_Delay(6000);
+    // wait for 3 seconds before quitting
+    SDL_Delay(3000);
 
     SDL_DestroyTexture(tex);
     SDL_DestroyRenderer(ren);
@@ -86,7 +84,6 @@ int main(int argc, char *argv[])
 
 // gcc -o image_processing image_processing.c -lSDL2 -lm -I./ -DSTB_IMAGE_IMPLEMENTATION
 // ./image_processing weasel.jpeg
-
 
 // docs: https://github.com/nothings/stb/blob/master/stb_image.h
 // https://github.com/libsdl-org/SDL/tree/main/docs
