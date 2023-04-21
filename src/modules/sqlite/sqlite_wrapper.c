@@ -53,6 +53,8 @@ int open_db()
         return 1;
     }
     printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", todos_table);
+
+    return 0;
 }
 
 // create an initial user (username: alice, password: thisiswonderland) with added salt
@@ -71,10 +73,12 @@ int username_get(char *user_name)
         sqlite3_close(db);
         return 1;
     }
+    return 0;
 }
 
 // password check
 
+// PATCH/ PUT ops
 // insert data
 int insert_data()
 {
@@ -89,9 +93,10 @@ int insert_data()
     {
         fprintf(stdout, "Data insert success master weasel\n");
     }
+        return 0;
 }
 
-// show all data from table
+// show table
 int show_data()
 {
     sql = "SELECT * FROM test_table";
@@ -101,14 +106,11 @@ int show_data()
         fprintf(stderr, "SQL select error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
+        return 0;
 }
 
-// TODO
-// PATCH/ PUT ops
-int put_data() {}
-
 // TODO remove entries
-int_remove() {}
+int remove() {}
 
 // final shutdown db
 void close_db(sqlite3 *db)
@@ -128,6 +130,16 @@ void close_db(sqlite3 *db)
 // ...
 
 // OG sqlite ops
+// static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
+// {
+//     for (int i = 0; i < numCols; i++)
+//     {
+//         printf("%s = %s\n", azColName[i], valEachCol[i] ? valEachCol[i] : "NULL");
+//     }
+//     printf("\n");
+//     return 0;
+// };
+
 // int main()
 // {
 //     sqlite3 *db;

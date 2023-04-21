@@ -6,7 +6,7 @@
 
 #define IMAGE_DIR "backend/public/images/"
 
-int main(int argc, char *argv[])
+int main(void)
 {
 
     // check if image exists first
@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
     SDL_RenderCopy(ren, tex, NULL, NULL);
     SDL_RenderPresent(ren);
 
-    // wait for 6 seconds before quitting
-    SDL_Delay(6000);
+    // wait for 3 seconds before quitting
+    SDL_Delay(3000);
 
     SDL_DestroyTexture(tex);
     SDL_DestroyRenderer(ren);
