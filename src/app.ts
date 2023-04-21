@@ -1,7 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
 import passport from "passport";
-import LocalStrategy from "passport-local";
+// import LocalStrategy from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -13,7 +14,7 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-import { openDb, closeDb, getUserName } from "./models/db";
+import { openDb, closeDb, getUserName, getUserId } from "./models/db";
 import { comparePassword } from "./models/encryption";
 
 dotenv.config();
@@ -49,8 +50,6 @@ app.use(
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     // cookie: { secure: false },
-    // c func below 👇
-    // store: openDb(),
   })
 );
 app.use(passport.initialize());
@@ -58,41 +57,41 @@ app.use(passport.session());
 // define a passport strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    if (openDb()) {
-    try {
-      // c func below 👇
-      const user = await getUserName(username);
-      if (!user) {
-        return done(null, false, {
-          message: "Incorrect username.",
-        });
+    if (openDb) {
+      try {
+        const user = await getUserName(username);
+        if (!user) {
+          return done(null, false, {
+            message: "Incorrect username.",
+          });
+        }
+
+        const isPasswordMatched = comparePassword(
+          password,
+          user.hashedPassword
+        );
+        if (!isPasswordMatched) {
+          return done(null, false, {
+            message: "Incorrect password.",
+          });
+        }
+        // if authentication success, return user
+        return done(null, user);
+      } catch (err) {
+        return done(err);
       }
-      // c function compare the password with the hashed password 👇
-      const isPasswordMatched = comparePassword(password, user.password);
-      if (!isPasswordMatched) {
-        return done(null, false, {
-          message: "Incorrect password.",
-        });
-      }
-      // if authentication success, return user
-      return done(null, user);
-    } catch (err) {
-      return done(err);
+    } else {
+      console.error("db-call issue master weasel..?");
     }
-  }
-  else {
-    console.error("db issue master weasel..?")
-  }
   })
 );
 // serialize and deserialize user
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
-passport.deserializeUser(async (id: any, done) => {
+passport.deserializeUser(async (id: number, done) => {
   try {
-    // c func below 👇
-    const user = await getUserById(id);
+    const user = await getUserId(id);
     done(null, user);
   } catch (err) {
     done(err);

@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <sqlite3.h>
 
+sqlite3 *db;
+char *zErrMsg = 0;
+int return_code;
+char *sql;
+char *users_table = "users";
+char *todos_table = "to-dos";
+char *user_name = "";
+
 // print out name and val for each col on the row
 static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)
 {
@@ -12,18 +20,10 @@ static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **az
     return 0;
 };
 
-sqlite3 *db;
-char *zErrMsg = 0;
-int return_code;
-char *sql;
-char *users_table = "users";
-char *todos_table = "to-dos";
-char *user_name = "";
-
 // open db connection and init schema
 int open_db(void)
 {
-    return_code = sqlite3_open("cunning-todos.db", &db);
+    return_code = sqlite3_open("cunning-to-dos.db", &db);
     if (return_code != SQLITE_OK)
     {
         fprintf(stderr, "Can't open_db master weasel: %s\n", sqlite3_errmsg(db));
@@ -68,7 +68,7 @@ int username_get(char *user_name)
     sqlite3_free(sql);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "select error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "select users_error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         sqlite3_close(db);
         return 1;
@@ -76,13 +76,14 @@ int username_get(char *user_name)
     return 0;
 }
 
-// password check
+// password
 
-// PATCH/ PUT ops
-// insert data
+// getId
+
+// patch/ put ops
 int insert_data()
 {
-    sql = "INSERT INTO test_table VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
+    sql = "INSERT INTO to-dos VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -96,6 +97,9 @@ int insert_data()
     return 0;
 }
 
+// TODO remove entries
+int remove() {}
+
 // show table
 int show_data()
 {
@@ -108,9 +112,6 @@ int show_data()
     }
     return 0;
 }
-
-// TODO remove entries
-int remove() {}
 
 // final shutdown db
 void close_db(sqlite3 *db)

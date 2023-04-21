@@ -76,7 +76,6 @@ int main(void)
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
-
     stbi_image_free(data);
 
     return 0;
