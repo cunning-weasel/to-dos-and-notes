@@ -12,7 +12,7 @@ const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   // create table todos
 
   // user ops
-  username_check: ["int", ["string"]],
+  username_get: ["int", ["string"]],
   // todo ops
   // ..
 });
@@ -41,8 +41,8 @@ export const updateToDo = (id, updates) => {
   }
 };
 
-export const checkUserName = (username: string): number => {
-  return db_lib.username_check(username);
+export const getUserName = (username: string): number => {
+  return db_lib.username_get(username);
 };
 
 // TODO

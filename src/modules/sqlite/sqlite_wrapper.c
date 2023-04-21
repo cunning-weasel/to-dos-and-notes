@@ -20,7 +20,7 @@ char *users_table = "users";
 char *todos_table = "to-dos";
 char *user_name = "";
 
-// open db connection
+// open db connection and init schema
 int open_db()
 {
     return_code = sqlite3_open("cunning-todos.db", &db);
@@ -30,44 +30,36 @@ int open_db()
         sqlite3_close(db);
         return 1;
     }
-}
-
-// check for changes in db & schema
-int db_changes_check()
-{
-    if (sqlite3_changes(db) == 0)
+    // create users table
+    char sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, hashed_password BLOB, salt BLOB);";
+    return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
     {
-        // create users table
-        char sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, hashed_password BLOB,salt BLOB);";
-        return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
-        if (return_code != SQLITE_OK)
-        {
-            fprintf(stderr, "SQL users create table error master weasel: %s\n", zErrMsg);
-            sqlite3_free(zErrMsg);
-            sqlite3_close(db);
-            return 1;
-        }
-        printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", users_table);
-
-        // create todos table
-        char sql = "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, owner_id INTEGER NOT NULL, title TEXT NOT NULL, completed INTEGER);";
-        return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
-        if (return_code != SQLITE_OK)
-        {
-            fprintf(stderr, "SQL todos create table error master weasel: %s\n", zErrMsg);
-            sqlite3_free(zErrMsg);
-            sqlite3_close(db);
-            return 1;
-        }
-        printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", todos_table);
+        fprintf(stderr, "SQL users create table error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
     }
+    printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", users_table);
+
+    // create todos table
+    char sql = "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, owner_id INTEGER NOT NULL, title TEXT NOT NULL, completed INTEGER);";
+    return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL todos create table error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
+    }
+    printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", todos_table);
 }
 
 // create an initial user (username: alice, password: thisiswonderland) with added salt
 int create_user() {}
 
-// check username
-int username_check(char *user_name)
+// get username
+int username_get(char *user_name)
 {
     sql = sqlite3_mprintf("SELECT * FROM users WHERE username='%q';", user_name);
     return_code = sqlite3_exec(db, sql, NULL, NULL, &zErrMsg);

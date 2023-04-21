@@ -13,7 +13,7 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-import { openDb, closeDb,  } from "./models/db";
+import { openDb, closeDb, getUserName } from "./models/db";
 import { comparePassword } from "./models/encryption";
 
 dotenv.config();
@@ -61,7 +61,7 @@ passport.use(
     if (openDb()) {
     try {
       // c func below 👇
-      const user = await getUserByUsername(username);
+      const user = await getUserName(username);
       if (!user) {
         return done(null, false, {
           message: "Incorrect username.",
