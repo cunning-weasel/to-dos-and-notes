@@ -2,39 +2,31 @@ import { Request, Response, NextFunction } from "express";
 
 import { comparePassword } from "../models/encryption";
 import {
-  getToDoById,
-  createToDo,
-  updateToDo,
+  getUserId,
   // ...
 } from "../models/db";
 
-export const get = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.json(await getToDoById(req.query.page));
-  } catch (err) {
-    console.error(`Error while getting to-do/ notes`, err.message);
-    next(err);
-  }
-};
+export const login = async (req: Request, res: Response) => {
+  const { id, password } = req.body;
+  const user = await getUserId({ id });
 
-export const post = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    res.json(await createToDo(req.body));
-  } catch (err) {
-    console.error(`Error while creating to-do/ note`, err.message);
-    next(err);
+  if (!user) {
+    throw Error("incorrect username.");
   }
-};
 
-export const patch = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
   try {
-    res.json(await updateToDo(req.params.id, req.body));
-  } catch (err) {
-    console.error(`Error while updating to-do/ note`, err.message);
-    next(err);
+    const match = comparePassword(password, user.password);
+
+    if (!match) {
+      return res.status(403).json({
+        message: "incorrect password.",
+      });
+    }
+
+    return res.json({
+      message: "User logged in successfully!",
+    });
+  } catch (error) {
+    throw new Error(error);
   }
 };

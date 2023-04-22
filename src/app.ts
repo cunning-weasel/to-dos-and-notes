@@ -1,7 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
 import passport from "passport";
-// import LocalStrategy from "passport-local";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import path from "path";
@@ -80,8 +79,6 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    } else {
-      console.error("db-call issue master weasel..?");
     }
   })
 );

@@ -1,30 +1,20 @@
 import ffi from "ffi-napi";
 
 const encryption_lib = ffi.Library("./modules/encryption_lib.so", {
-  encrypt: ["int", ["string", "string"]],
-  decrypt: ["int", ["string", "string"]],
-  compare: ["int", ["string", "string"]],
+  encryptor: ["int", ["string", "string", "int"]],
   // ...
 });
 
-export const encrypt = (
-  password: string,
-  encryptedPassword: string
-): number => {
-  return encryption_lib.encrypt(password, encryptedPassword);
+export const encrypt = (input: string, output: string): number => {
+  return encryption_lib.encryptor(input, output, 1);
+  // return output instead?
 };
 
-export const decrypt = (
-  encryptedPassword: string,
-  decryptedPassword: string
-): number => {
-  return encryption_lib.decrypt(encryptedPassword, decryptedPassword);
+export const decrypt = (input: string, output: string): number => {
+  return encryption_lib.encryptor(input, output, 0);
+  // return output instead?
 };
 
-// refactor - can be simple bool type return
-export const comparePassword = (
-  password: string,
-  hashedPassword: string
-): number => {
-  return encryption_lib.compare(password, hashedPassword);
+export const comparePassword = (input, output): boolean => {
+  return encrypt === decrypt;
 };

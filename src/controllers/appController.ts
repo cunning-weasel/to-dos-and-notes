@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { getToDoById, createToDo, updateToDo } from "../models/db";
+import { getUserId } from "../models/db";
 import {
   comparePassword,
   // token? here usually jwt?
@@ -15,7 +15,7 @@ export const getToDo = async (
   next: NextFunction
 ) => {
   try {
-    res.json(await getToDoById(req.query.page));
+    res.json(await getUserId(req.params.id));
   } catch (err) {
     console.error(`Error while getting to-do/ notes`, err.message);
     next(err);
