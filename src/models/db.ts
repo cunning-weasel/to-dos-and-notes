@@ -38,6 +38,6 @@ export const createUser = (
   hashedPassWord: string,
   salt: string
 ): number => {
-  const { storeHashedPassWord, salt } = encrypt(password, hashedPassWord);
+  const storeHashedPassWord = encrypt(password, hashedPassWord);
   return db_lib.create_user(username, storeHashedPassWord, salt);
 };

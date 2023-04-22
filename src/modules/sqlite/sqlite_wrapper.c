@@ -72,7 +72,7 @@ int create_user(char *user_name, char *hashed_password, char *salt)
         sqlite3_close(db);
         return 1;
     }
-    printf("'%s' alice with pw added successfully master weasel\n", todos_table);
+    printf("'%s' alice with pw added successfully to db master weasel\n", todos_table);
     return 0;
 }
 
@@ -91,8 +91,6 @@ int username_get(char *user_name)
     }
     return 0;
 }
-
-// password
 
 // getId
 
