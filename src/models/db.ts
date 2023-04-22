@@ -10,6 +10,7 @@ const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   // user ops
   username_get: ["int", ["string"]],
   id_user_get: ["int", ["int"]],
+  create_user: ["int", ["string", "string", "string"]],
   // todo ops
   // ..
 });
@@ -22,10 +23,6 @@ export const closeDb = () => {
   return db_lib.close_db();
 };
 
-export const encryptPassword = (user) => {
-  user.password = encrypt(user.password, user.hashedPassword);
-};
-
 export const getUserName = (username: string): number => {
   return db_lib.username_get(username);
 };
@@ -34,12 +31,13 @@ export const getUserId = (id: number): number => {
   return db_lib.id_user_get(id);
 };
 
-// export const updateToDo = (id, text) => {
-//   // encrypt
-//   if (updates.password) {
-//     return encrypt(id, updates);
-//   }
-// };
-
 // TODO
-// create initial user with hashed password
+// create initial user with hashed & salty password
+export const createUser = (
+  username: string,
+  hashedPassWord: string,
+  salt: string
+): number => {
+  const storeHashedPassWord = encrypt(password, hashedPassWord);
+  return db_lib.create_user(username, storeHashedPassWord, salt);
+};

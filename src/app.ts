@@ -79,8 +79,6 @@ passport.use(
       } catch (err) {
         return done(err);
       }
-    } else {
-      console.error("db-call issue master weasel..?");
     }
   })
 );

@@ -40,25 +40,41 @@ int open_db(void)
         sqlite3_close(db);
         return 1;
     }
-    printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", users_table);
+    printf("'%s' table created successfully master weasel\n", users_table);
 
     // create todos table
     char sql = "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, owner_id INTEGER NOT NULL, title TEXT NOT NULL, completed INTEGER);";
     return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL todos create table error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "todos create table error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         sqlite3_close(db);
         return 1;
     }
-    printf("No changes, assuming '%s' table does not exist... has now been created successfully master weasel\n", todos_table);
+    printf("'%s' table created successfully master weasel\n", todos_table);
 
     return 0;
 }
 
-// create an initial user (username: alice, password: thisiswonderland) with added salt
-int create_user() {}
+// create an initial user (username: alice, password: inwonderland) with added salt
+int create_user(char *user_name, char *hashed_password, char *salt)
+{
+    char *salt; // add to model to expidite db op?
+    char sql = "INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt;
+    // run crypto ops in models to add pw, salt to db put op
+    return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+    // run crypto ops in models to add password, salt to db put op
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "insert_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
+    }
+    printf("'%s' alice with pw added successfully to db master weasel\n", todos_table);
+    return 0;
+}
 
 // get username
 int username_get(char *user_name)
@@ -75,8 +91,6 @@ int username_get(char *user_name)
     }
     return 0;
 }
-
-// password
 
 // getId
 
@@ -114,9 +128,9 @@ int show_data()
 }
 
 // final shutdown db
-void close_db(sqlite3 *db)
+void close_db()
 {
-    return sqlite3_close(db);
+    return sqlite3_close(&db);
 }
 
 // compile and link: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
