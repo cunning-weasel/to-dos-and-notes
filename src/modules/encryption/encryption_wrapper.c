@@ -137,7 +137,7 @@ int encrypt(const char *in, char *out)
 int decrypt(const char *in, char *out)
 {
     /* Allow enough space in output buffer for additional block */
-    unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
+    unsigned char inbuf[1024 + EVP_MAX_BLOCK_LENGTH], outbuf[1024];
     int inlen, outlen;
     EVP_CIPHER_CTX *ctx;
     /*
