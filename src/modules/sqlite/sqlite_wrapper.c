@@ -93,33 +93,54 @@ int username_get(char *user_name)
 }
 
 // getId
-// SELECT * FROM todos WHERE owner_id = ?
-
-// patch/ put ops
-int insert_data()
+int get_user_id()
 {
-    sql = "INSERT INTO to-dos VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
+    sql = "SELECT * FROM todos WHERE owner_id = ?";
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL get_owner_id master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Data insert success master weasel\n");
+        fprintf(stdout, "get_owner_id success master weasel\n");
     }
     return 0;
 }
 
-// UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?
-
-
+// patch/ put ops
+int patch_todo()
+{
+    sql = "UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?";
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL todo_update_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data todo_update success master weasel\n");
+    }
+    return 0;
+}
 
 // TODO remove entries
 int remove() {
-    // DELETE FROM todos WHERE id = ? AND owner_id = ?
-    // DELETE FROM todos WHERE owner_id = ? AND completed = ?
+    // sql = "DELETE FROM todos WHERE id = ? AND owner_id = ?"
+    // sql = "DELETE FROM todos WHERE owner_id = ? AND completed = ?"
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL update_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data update success master weasel\n");
+    }
+    return 0;
 }
 
 // show table

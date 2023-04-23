@@ -9,7 +9,8 @@
 #include <openssl/params.h>     /* OSSL_PARAM_*         */
 #include <openssl/thread.h>     /* OSSL_set_max_threads */
 #include <openssl/kdf.h>        /* EVP_KDF_*            */
-// sudo apt-get install libssl-dev
+
+// sudo apt install libssl-dev
 
 // generate random initialization vector/ salt to ensure that each encrypted message is different
 int generate_random_iv(unsigned char *iv, size_t iv_len)
@@ -38,7 +39,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
     unsigned char result[outlen];
 
     /* required if threads > 1 */
-    if (OSSL_set_max_threads(NULL, threads) != 1)
+    if (OSSL_set_max_threads(threads) != 1)
     {
         goto fail
     };
@@ -47,15 +48,15 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
     *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_THREADS, &threads);
     *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_LANES, &lanes);
     *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_MEMCOST, &memcost);
-    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt, strlen((const char *)salt));
-    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_PASSWORD, pwd, strlen((const char *)pwd));
+    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt, strlen(salt));   // removed unnecessary cast
+    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_PASSWORD, pwd, strlen(pwd)); // removed unnecessary cast
     *p++ = OSSL_PARAM_construct_end();
 
     if ((kdf = EVP_KDF_fetch(NULL, "ARGON2D", NULL)) == NULL)
     {
         goto fail
     };
-    if ((kctx = EVP_KDF_CTX_new(kdf)) == NULL)
+    if ((kctx = EVP_KDF_CTX_new(kdf, NULL)) == NULL)
     {
         goto fail
     };
@@ -71,9 +72,10 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
 fail:
     EVP_KDF_free(kdf);
     EVP_KDF_CTX_free(kctx);
-    OSSL_set_max_threads(NULL, 0);
+    OSSL_set_max_threads(0);
 
     return retval;
+    // return hashedPassword and salt
 }
 
 // encryptor
@@ -91,12 +93,11 @@ int encryptor(const char *in, char *out, int *do_crypt)
     };
     int inlen, outlen;
     EVP_CIPHER_CTX *ctx;
-    /*
-     * set these from generate_random_iv
-     * and Argon2 algo
-     */
-    unsigned char key[] = "0123456789abcdeF";
-    unsigned char iv[] = "1234567887654321";
+    // and Argon2 algo and generate_IV
+    unsigned char key[] = "0123456789abcdeF"; // key[EVP_MAX_KEY_LENGTH]
+    unsigned char iv[] = "1234567887654321";  // iv[EVP_MAX_IV_LENGTH]
+
+    // generate_random...
 
     /* Don't set key or IV right away; we want to check lengths */
     ctx = EVP_CIPHER_CTX_new();
@@ -147,7 +148,7 @@ int encryptor(const char *in, char *out, int *do_crypt)
 
 // docs: https://www.openssl.org/docs/man3.1/man3/EVP_CipherInit_ex2.html
 
-// compile: gcc -o encryp_wrapper encryp_wrapper.c -lcrypto
+// compile: gcc -o encryp_wrapper encryp_wrapper.c -lssl -lcrypto
 // run ./ecryp_wrapper
 
 // ...
