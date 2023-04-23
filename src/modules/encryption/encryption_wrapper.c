@@ -64,7 +64,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
         goto fail
     };
     // TODO
-    // need to send salt and hashed pw to db
+    // should return hashedPassword and salt
     printf("Output = %s\n", OPENSSL_buf2hexstr(result, outlen));
     retval = 0;
 
