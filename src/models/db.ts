@@ -9,7 +9,7 @@ const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   close_db: ["void", ["void"]],
   // user ops
   username_get: ["int", ["string"]],
-  id_user_get: ["int", ["int"]],
+  get_owner_id: ["int", ["int"]],
   create_user: ["int", ["string", "string", "string"]],
   // todo ops
   // ..
@@ -29,7 +29,7 @@ export const getUserName = (username: string): number => {
 };
 
 export const getUserId = (id: number): number => {
-  return db_lib.id_user_get(id);
+  return db_lib.get_owner_id(id);
 };
 
 // TODO

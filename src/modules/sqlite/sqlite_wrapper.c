@@ -92,10 +92,10 @@ int username_get(char *user_name)
     return 0;
 }
 
-// getId
-int get_user_id()
+// get userid
+int get_owner_id(int *owner_id)
 {
-    sql = "SELECT * FROM todos WHERE owner_id = ?";
+    sql = "SELECT * FROM todos WHERE owner_id='%q';", owner_id;
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -126,19 +126,20 @@ int patch_todo()
     return 0;
 }
 
-// TODO remove entries
-int remove() {
+// delete
+int remove()
+{
     // sql = "DELETE FROM todos WHERE id = ? AND owner_id = ?"
     // sql = "DELETE FROM todos WHERE owner_id = ? AND completed = ?"
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL update_error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL delete_error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Data update success master weasel\n");
+        fprintf(stdout, "Data delete success master weasel\n");
     }
     return 0;
 }
