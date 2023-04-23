@@ -104,7 +104,7 @@ int get_by_owner_id(int *owner_id)
     }
     else
     {
-        fprintf(stdout, "Data insert success master weasel\n");
+        fprintf(stdout, "get_owner_id success master weasel\n");
     }
     return 0;
 }
@@ -116,12 +116,12 @@ int update(char *title, int *completed, int *id, int *owner_id)
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL todo_update_error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Data insert success master weasel\n");
+        fprintf(stdout, "Data todo_update success master weasel\n");
     }
     return 0;
 }
@@ -138,7 +138,7 @@ int remove()
     }
     else
     {
-        fprintf(stdout, "Data insert success master weasel\n");
+        fprintf(stdout, "Data delete success master weasel\n");
     }
     return 0;
 }
