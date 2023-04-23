@@ -1,10 +1,30 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include "stb_image.h"
 #include <unistd.h>
 
 #define IMAGE_DIR "backend/public/images/"
+
+// file ops
+// read file contents error handling
+// typedef struct file_contents_t {
+//     char *data;
+//     isize_t size;
+//     valid_t valid;
+
+// } file_contents_t;
+
+// file_contents_t read_file_contents(const char*);
+// image_t img = load_image_from_file_contents(fc);
+// texture_t texture = load_texture_from_image(img);
+
+// if (texture.valid) {
+//     //...
+// }
+
+// file compression && encry/ decry?
 
 int main(void)
 {
