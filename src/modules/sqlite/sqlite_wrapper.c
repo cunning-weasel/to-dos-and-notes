@@ -93,6 +93,7 @@ int username_get(char *user_name)
 }
 
 // getId
+// SELECT * FROM todos WHERE owner_id = ?
 
 // patch/ put ops
 int insert_data()
@@ -111,8 +112,15 @@ int insert_data()
     return 0;
 }
 
+// UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?
+
+
+
 // TODO remove entries
-int remove() {}
+int remove() {
+    // DELETE FROM todos WHERE id = ? AND owner_id = ?
+    // DELETE FROM todos WHERE owner_id = ? AND completed = ?
+}
 
 // show table
 int show_data()

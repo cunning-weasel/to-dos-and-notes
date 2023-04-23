@@ -64,7 +64,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
         goto fail
     };
     // TODO
-    // need to send the salt and hash to db
+    // should return hashedPassword and salt
     printf("Output = %s\n", OPENSSL_buf2hexstr(result, outlen));
     retval = 0;
 
@@ -87,40 +87,8 @@ int encryptor(const char *in, char *out, int *do_crypt)
     }
     if (do_crypt == 0)
     {
-<<<<<<< HEAD
-        inlen = fread(inbuf, 1, 1024, in);
-        if (inlen <= 0)
-        {
-            break
-        };
-        if (!EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen))
-        {
-            /* Error */
-            EVP_CIPHER_CTX_free(ctx);
-            return 0;
-        }
-        fwrite(outbuf, 1, outlen, out);
-    }
-    if (!EVP_CipherFinal_ex(ctx, outbuf, &outlen))
-    {
-        /* Error */
-        EVP_CIPHER_CTX_free(ctx);
-        return 0;
-    }
-    fwrite(outbuf, 1, outlen, out);
-
-    EVP_CIPHER_CTX_free(ctx);
-    return 1;
-}
-
-int decrypt(const char *in, char *out)
-{
-    /* Allow enough space in output buffer for additional block */
-    unsigned char inbuf[1024 + EVP_MAX_BLOCK_LENGTH], outbuf[1024];
-=======
         unsigned char inbuf[1024 + EVP_MAX_BLOCK_LENGTH], outbuf[1024]
     };
->>>>>>> e0c332005fb3ec006b1930d942f59e5d52e04559
     int inlen, outlen;
     EVP_CIPHER_CTX *ctx;
     /*
