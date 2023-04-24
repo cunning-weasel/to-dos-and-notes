@@ -10,8 +10,6 @@
 #include <openssl/thread.h>     /* OSSL_set_max_threads */
 #include <openssl/kdf.h>        /* EVP_KDF_*            */
 
-// sudo apt install libssl-dev
-
 // generate random initialization vector/ salt to ensure that each encrypted message is different
 int generate_random_iv(unsigned char *iv, size_t iv_len)
 {

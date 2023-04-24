@@ -12,7 +12,6 @@ const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   get_owner_id: ["int", ["int"]],
   create_user: ["int", ["string", "string", "string"]],
   // todo ops
-  // ..
   // insert_data
 });
 

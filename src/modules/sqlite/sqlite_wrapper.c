@@ -126,10 +126,26 @@ int update(char *title, int *completed, int *id, int *owner_id)
     return 0;
 }
 
-int remove()
+// rm ops
+int remove_todo(int *id, int *owner_id)
 {
-    sql = "DELETE FROM todos WHERE id = ? AND owner_id = ?;";
-    // sql = "DELETE FROM todos WHERE owner_id = ? AND completed = ?;";
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE id = ? AND owner_id = ?;", id, owner_id);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data delete success master weasel\n");
+    }
+    return 0;
+}
+
+int remove_completed_todo(int *owner_id, int *completed_todo)
+{
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE owner_id = ? AND completed = ?;", owner_id, completed_todo);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
