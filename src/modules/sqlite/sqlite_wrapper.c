@@ -31,7 +31,7 @@ int open_db(void)
         return 1;
     }
     // create users table
-    char sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, hashed_password BLOB, salt BLOB);";
+    sql = "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, hashed_password BLOB, salt BLOB);";
     return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -43,7 +43,7 @@ int open_db(void)
     printf("'%s' table created successfully master weasel\n", users_table);
 
     // create todos table
-    char sql = "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, owner_id INTEGER NOT NULL, title TEXT NOT NULL, completed INTEGER);";
+    sql = "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, owner_id INTEGER NOT NULL, title TEXT NOT NULL, completed INTEGER);";
     return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -58,10 +58,10 @@ int open_db(void)
 }
 
 // create an initial user (username: alice, password: inwonderland) with added salt
-int create_user(char *user_name, char *hashed_password, char *salt)
+int create_user(char *user_name, char *hashed_password, char *salt[])
 {
-    char *salt; // add to model to expidite db op?
-    char sql = "INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt;
+    // char *salt; - add to model to expidite db op? change data type too!
+    sql = "INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt;
     // run crypto ops in models to add pw, salt to db put op
     return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
     // run crypto ops in models to add password, salt to db put op
@@ -92,14 +92,14 @@ int username_get(char *user_name)
     return 0;
 }
 
-// get userid
-int get_owner_id(int *owner_id)
+// getId
+int get_by_owner_id(int *owner_id)
 {
-    sql = "SELECT * FROM todos WHERE owner_id='%q';", owner_id;
+    sql = sqlite3_mprintf("SELECT * FROM todos WHERE owner_id = ?;", owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL get_owner_id master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
@@ -110,9 +110,9 @@ int get_owner_id(int *owner_id)
 }
 
 // patch/ put ops
-int patch_todo()
+int update(char *title, int *completed, int *id, int *owner_id)
 {
-    sql = "UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?";
+    sql = sqlite3_mprintf("UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?;", title, completed, id, owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -126,15 +126,14 @@ int patch_todo()
     return 0;
 }
 
-// delete
 int remove()
 {
-    // sql = "DELETE FROM todos WHERE id = ? AND owner_id = ?"
-    // sql = "DELETE FROM todos WHERE owner_id = ? AND completed = ?"
+    sql = "DELETE FROM todos WHERE id = ? AND owner_id = ?;";
+    // sql = "DELETE FROM todos WHERE owner_id = ? AND completed = ?;";
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL delete_error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
@@ -158,10 +157,27 @@ int show_data()
 }
 
 // final shutdown db
-void close_db()
+int close_db()
 {
-    return sqlite3_close(&db);
+    return sqlite3_close(db);
+    return 0;
 }
+
+// int insert_data()
+// {
+//     sql = "INSERT INTO to-dos VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
+//     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+//     if (return_code != SQLITE_OK)
+//     {
+//         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
+//         sqlite3_free(zErrMsg);
+//     }
+//     else
+//     {
+//         fprintf(stdout, "Data insert success master weasel\n");
+//     }
+//     return 0;
+// }
 
 // compile and link: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
 // run comiled file: ./output_sqlite_wrapper
