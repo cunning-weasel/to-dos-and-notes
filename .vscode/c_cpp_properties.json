@@ -14,20 +14,10 @@
             "configurationProvider": "ms-vscode.makefile-tools"
         },
         {
-            "name": "opsenssl_thread",
+            "name": "opsenssl",
             "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64"
-        },
-        {
-            "name": "threadopenssl",
-            "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/include/openssl"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

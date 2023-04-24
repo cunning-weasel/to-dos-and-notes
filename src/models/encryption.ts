@@ -5,16 +5,16 @@ const encryption_lib = ffi.Library("./modules/encryption_lib.so", {
   // ...
 });
 
-export const encrypt = (input: string, output: string): number => {
-  return encryption_lib.encryptor(input, output, 1);
-  // return output instead?
+export const encrypt = (input: string, output: string): string => {
+  encryption_lib.encryptor(input, output, 1);
+  return input && output;
 };
 
-export const decrypt = (input: string, output: string): number => {
-  return encryption_lib.encryptor(input, output, 0);
-  // return output instead?
+export const decrypt = (input: string, output: string): string => {
+  encryption_lib.encryptor(input, output, 0);
+  return output;
 };
 
-export const comparePassword = (input, output): boolean => {
-  return encrypt === decrypt;
+export const comparePassword = (password, decrypted): boolean => {
+  return encrypt === decrypt ? true : false;
 };

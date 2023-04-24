@@ -1,6 +1,5 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include "stb_image.h"
 #include <unistd.h>

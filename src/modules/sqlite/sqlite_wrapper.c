@@ -61,7 +61,7 @@ int open_db(void)
 int create_user(char *user_name, char *hashed_password, char *salt[])
 {
     // char *salt; - add to model to expidite db op? change data type too!
-    sql = "INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt;
+    sql = sqlite3_mprintf("INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt);
     // run crypto ops in models to add pw, salt to db put op
     return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
     // run crypto ops in models to add password, salt to db put op
@@ -95,7 +95,7 @@ int username_get(char *user_name)
 // getId
 int get_by_owner_id(int *owner_id)
 {
-    sql = sqlite3_mprintf("SELECT * FROM todos WHERE owner_id = ?;", owner_id);
+    sql = sqlite3_mprintf("SELECT * FROM todos WHERE owner_id ='%q';", owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -110,9 +110,9 @@ int get_by_owner_id(int *owner_id)
 }
 
 // patch/ put ops
-int update(char *title, int *completed, int *id, int *owner_id)
+int update_todo(char *title, int *completed, int *id, int *owner_id)
 {
-    sql = sqlite3_mprintf("UPDATE todos SET title = ?, completed = ? WHERE id = ? AND owner_id = ?;", title, completed, id, owner_id);
+    sql = sqlite3_mprintf("UPDATE todos SET title ='%q', completed ='%q' WHERE id ='%q' AND owner_id ='%q';", title, completed, id, owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -129,7 +129,7 @@ int update(char *title, int *completed, int *id, int *owner_id)
 // rm ops
 int remove_todo(int *id, int *owner_id)
 {
-    sql = sqlite3_mprintf("DELETE FROM todos WHERE id = ? AND owner_id = ?;", id, owner_id);
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE id ='%q' AND owner_id ='%q';", id, owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -145,7 +145,7 @@ int remove_todo(int *id, int *owner_id)
 
 int remove_completed_todo(int *owner_id, int *completed_todo)
 {
-    sql = sqlite3_mprintf("DELETE FROM todos WHERE owner_id = ? AND completed = ?;", owner_id, completed_todo);
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE owner_id ='%q' AND completed ='%q';", owner_id, completed_todo);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -162,7 +162,8 @@ int remove_completed_todo(int *owner_id, int *completed_todo)
 // show table
 int show_data()
 {
-    sql = "SELECT * FROM test_table";
+    // sql = "SELECT * FROM to-dos";
+    sql = "SELECT * FROM users";
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {

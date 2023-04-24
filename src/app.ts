@@ -56,7 +56,7 @@ app.use(passport.session());
 // define a passport strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    if (openDb) {
+    if (openDb()) {
       try {
         const user = await getUserName(username);
         if (!user) {
@@ -65,10 +65,7 @@ passport.use(
           });
         }
 
-        const isPasswordMatched = comparePassword(
-          password,
-          user.hashedPassword
-        );
+        const isPasswordMatched = comparePassword(password, user);
         if (!isPasswordMatched) {
           return done(null, false, {
             message: "Incorrect password.",

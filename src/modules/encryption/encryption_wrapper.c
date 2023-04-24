@@ -4,11 +4,16 @@
 #include <openssl/err.h>
 #include <openssl/rand.h>
 #include <openssl/ssl.h>
+#include <openssl/crypto.h>
+#include <openssl/core.h>
 #include <string.h>             /* strlen               */
 #include <openssl/core_names.h> /* OSSL_KDF_*           */
 #include <openssl/params.h>     /* OSSL_PARAM_*         */
-#include <openssl/thread.h>     /* OSSL_set_max_threads */
-#include <openssl/kdf.h>        /* EVP_KDF_*            */
+// #include <openssl/thread.h>     /* OSSL_set_max_threads */
+#include <openssl/kdf.h> /* EVP_KDF_*            */
+
+// apt install libssl-dev
+// apt install openssl
 
 // generate random initialization vector/ salt to ensure that each encrypted message is different
 int generate_random_iv(unsigned char *iv, size_t iv_len)
@@ -17,6 +22,7 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
     {
         return -1;
     }
+    // return iv_len;
     return 0;
 }
 
@@ -29,7 +35,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
     EVP_KDF_CTX *kctx = NULL;
     OSSL_PARAM params[6], *p = params;
     /* argon2 params, please refer to RFC9106 for recommended defaults */
-    uint32_t lanes = 2, threads = 2, memcost = 65536;
+    // uint32_t lanes = 2, threads = 2, memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
     char pwd[] = "inwonderland", salt[] = "saltsalt";
     /* derive result */
@@ -37,33 +43,31 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
     unsigned char result[outlen];
 
     /* required if threads > 1 */
-    if (OSSL_set_max_threads(threads) != 1)
-    {
-        goto fail
-    };
+    // if (OSSL_set_max_threads(threads) != 1)
+    // {
+    //     goto fail;
+    // };
 
     p = params;
-    *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_THREADS, &threads);
-    *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_LANES, &lanes);
-    *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_MEMCOST, &memcost);
+    // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_THREADS, &threads);
+    // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_LANES, &lanes);
+    // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_MEMCOST, &memcost);
     *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt, strlen(salt));   // removed unnecessary cast
     *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_PASSWORD, pwd, strlen(pwd)); // removed unnecessary cast
     *p++ = OSSL_PARAM_construct_end();
 
     if ((kdf = EVP_KDF_fetch(NULL, "ARGON2D", NULL)) == NULL)
     {
-        goto fail
+        goto fail;
     };
     if ((kctx = EVP_KDF_CTX_new(kdf, NULL)) == NULL)
     {
-        goto fail
+        goto fail;
     };
     if (EVP_KDF_derive(kctx, &result[0], outlen, params) != 1)
     {
-        goto fail
+        goto fail;
     };
-    // TODO
-    // should return hashedPassword and salt
     printf("Output = %s\n", OPENSSL_buf2hexstr(result, outlen));
     retval = 0;
 
@@ -78,28 +82,21 @@ fail:
 
 // encryptor
 // 1 = encry, 0 = decry
-int encryptor(const char *in, char *out, int *do_crypt)
+int encryptor(FILE *in, FILE *out, int *do_crypt)
 {
     /* Allow enough space in output buffer for additional block*/
-    if (do_crypt == 1)
-    {
-        unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH]
-    }
-    if (do_crypt == 0)
-    {
-        unsigned char inbuf[1024 + EVP_MAX_BLOCK_LENGTH], outbuf[1024]
-    };
+    unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
     int inlen, outlen;
     EVP_CIPHER_CTX *ctx;
     // and Argon2 algo and generate_IV
     unsigned char key[] = "0123456789abcdeF"; // key[EVP_MAX_KEY_LENGTH]
     unsigned char iv[] = "1234567887654321";  // iv[EVP_MAX_IV_LENGTH]
-
-    // generate_random...
+    // generate_random(iv, EVP_MAX_IV_LENGTH);
+    // argon_go_vroom(key, iv);
 
     /* Don't set key or IV right away; we want to check lengths */
     ctx = EVP_CIPHER_CTX_new();
-    if (!EVP_CipherInit_ex2(ctx, EVP_aes_128_cbc(), NULL, NULL, do_crypt, NULL))
+    if (!EVP_CipherInit_ex2(ctx, EVP_aes_128_cbc(), key, iv, do_crypt, NULL))
     {
         /* Error */
         EVP_CIPHER_CTX_free(ctx);
@@ -116,12 +113,20 @@ int encryptor(const char *in, char *out, int *do_crypt)
         return 0;
     }
 
-    while (true)
+    while (1)
     {
-        inlen = fread(inbuf, 1, 1024, in);
+        if (do_crypt) // swap for crypt select
+        {
+            inlen = fread(inbuf, 1, 1024, in);
+        }
+        else
+        {
+            inlen = fread(inbuf, 1, 1024 + EVP_MAX_BLOCK_LENGTH, in);
+        }
+
         if (inlen <= 0)
         {
-            break
+            break;
         };
         if (!EVP_CipherUpdate(ctx, outbuf, &outlen, inbuf, inlen))
         {
