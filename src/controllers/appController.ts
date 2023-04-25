@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ensureLoggedIn } from "connect-ensure-login";
 
 import { getUserId } from "../models/db";
 import {
@@ -6,7 +7,7 @@ import {
   // token? here usually jwt?
 } from "../models/encryption";
 
-// user data
+const ensureLogIn = ensureLoggedIn();
 
 // todo/ note data
 export const getToDo = async (
@@ -15,7 +16,22 @@ export const getToDo = async (
   next: NextFunction
 ) => {
   try {
-    res.json(await getUserId(req.params.id));
+    res.json(await getUserId(req.user.id));
+    let rows, todos;
+    todos = rows.map((row) => {
+      return {
+        id: row.id,
+        title: row.title,
+        completed: row.completed == 1 ? true : false,
+        url: "/app" + row.id,
+      };
+    });
+    res.locals.todos = todos;
+    res.locals.activeCount = todos.filter(function (todo) {
+      return !todo.completed;
+    }).length;
+    res.locals.completedCount = todos.length - res.locals.activeCount;
+    next();
   } catch (err) {
     console.error(`Error while getting to-do/ notes`, err.message);
     next(err);

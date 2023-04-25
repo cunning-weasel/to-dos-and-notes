@@ -12,9 +12,6 @@
 // #include <openssl/thread.h>     /* OSSL_set_max_threads */
 #include <openssl/kdf.h> /* EVP_KDF_*            */
 
-// apt install libssl-dev
-// apt install openssl
-
 // generate random initialization vector/ salt to ensure that each encrypted message is different
 int generate_random_iv(unsigned char *iv, size_t iv_len)
 {
@@ -28,7 +25,7 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
 
 // Argon2
 // hash that derives a key from a password using a salt and iteration count
-int argon_go_vroom(/* char *pwd, char *salt? */)
+int argon_go_vroom(char *pwd, char *salt)
 {
     int retval = 1;
     EVP_KDF *kdf = NULL;
@@ -37,7 +34,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
     /* argon2 params, please refer to RFC9106 for recommended defaults */
     // uint32_t lanes = 2, threads = 2, memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
-    char pwd[] = "inwonderland", salt[] = "saltsalt";
+    char pwd = "inwonderland", salt = "saltsalt";
     /* derive result */
     size_t outlen = 128;
     unsigned char result[outlen];
@@ -74,7 +71,7 @@ int argon_go_vroom(/* char *pwd, char *salt? */)
 fail:
     EVP_KDF_free(kdf);
     EVP_KDF_CTX_free(kctx);
-    OSSL_set_max_threads(0);
+    // OSSL_set_max_threads(0);
 
     return retval;
     // return hashedPassword and salt
@@ -123,7 +120,7 @@ int encryptor(FILE *in, FILE *out, int *do_crypt)
         {
             inlen = fread(inbuf, 1, 1024 + EVP_MAX_BLOCK_LENGTH, in);
         }
-
+        // break out of loop
         if (inlen <= 0)
         {
             break;

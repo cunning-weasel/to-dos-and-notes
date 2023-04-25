@@ -126,6 +126,22 @@ int update_todo(char *title, int *completed, int *id, int *owner_id)
     return 0;
 }
 
+int insert_data_into_todos(int *owner_id, char *title, int *completed)
+{
+    sql = sqlite3_mprintf("INSERT INTO to-dos (owner_id, title, completed) VALUES ('%q', '%q', '%q')", owner_id, title, completed);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL insert error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data insert success master weasel\n");
+    }
+    return 0;
+}
+
 // rm ops
 int remove_todo(int *id, int *owner_id)
 {
@@ -160,7 +176,7 @@ int remove_completed_todo(int *owner_id, int *completed_todo)
 }
 
 // show table
-int show_data()
+int show_data_db(void)
 {
     // sql = "SELECT * FROM to-dos";
     sql = "SELECT * FROM users";
@@ -174,27 +190,11 @@ int show_data()
 }
 
 // final shutdown db
-int close_db()
+int close_db(void)
 {
     return sqlite3_close(db);
     return 0;
 }
-
-// int insert_data()
-// {
-//     sql = "INSERT INTO to-dos VALUES (1, 'foo', 'weasel', 300), (2, 'bar', 'cat', 1), (3, 'potato', 'poodle', 16)";
-//     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
-//     if (return_code != SQLITE_OK)
-//     {
-//         fprintf(stderr, "SQL write error master weasel: %s\n", zErrMsg);
-//         sqlite3_free(zErrMsg);
-//     }
-//     else
-//     {
-//         fprintf(stdout, "Data insert success master weasel\n");
-//     }
-//     return 0;
-// }
 
 // compile and link: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
 // run comiled file: ./output_sqlite_wrapper

@@ -13,7 +13,7 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-import { openDb, closeDb, getUserName, getUserId } from "./models/db";
+import { openDb, getUserName } from "./models/db";
 import { comparePassword } from "./models/encryption";
 
 dotenv.config();
@@ -65,7 +65,7 @@ passport.use(
           });
         }
 
-        const isPasswordMatched = comparePassword(password, user);
+        const isPasswordMatched = comparePassword(password, user.hashed_password);
         if (!isPasswordMatched) {
           return done(null, false, {
             message: "Incorrect password.",
@@ -81,15 +81,14 @@ passport.use(
 );
 // serialize and deserialize user
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+  process.nextTick(() => {
+    done(null, { id: user.id, username: user.username });
+  });
 });
-passport.deserializeUser(async (id: number, done) => {
-  try {
-    const user = await getUserId(id);
+passport.deserializeUser(async (user: any, done) => {
+  process.nextTick(function () {
     done(null, user);
-  } catch (err) {
-    done(err);
-  }
+  });
 });
 
 // routes
