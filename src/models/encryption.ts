@@ -15,6 +15,9 @@ export const decrypt = (input: string, output: string): string => {
   return output;
 };
 
-export const comparePassword = (password, decrypted): boolean => {
-  return encrypt === decrypt ? true : false;
+export const comparePassword = (
+  encryptedPw: string,
+  encryptedPwDb: string
+): boolean => {
+  return encryptedPw === encryptedPwDb ? true : false;
 };

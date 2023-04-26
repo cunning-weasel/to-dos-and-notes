@@ -10,8 +10,8 @@ router.get("/", function (req: Request, res: Response, next: NextFunction) {
 // router.post(
 //   "/login/password",
 //   passport.authenticate("local", {
-//     successReturnToOrRedirect: "/",
-//     failureRedirect: "/login",
+//     successReturnToOrRedirect: "/app",
+//     failureRedirect: "/",
 //     failureMessage: true,
 //   })
 // );

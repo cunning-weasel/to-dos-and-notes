@@ -10,4 +10,12 @@ const router = express_1.default.Router();
 router.get("/", function (req, res, next) {
     res.render("index");
 });
+// router.post(
+//   "/login/password",
+//   passport.authenticate("local", {
+//     successReturnToOrRedirect: "/app",
+//     failureRedirect: "/",
+//     failureMessage: true,
+//   })
+// );
 exports.default = router;
