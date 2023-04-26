@@ -7,6 +7,7 @@ int return_code;
 char *sql;
 char *users_table = "users";
 char *todos_table = "to-dos";
+char *sessions_table = "sessions";
 char *user_name = "";
 
 // print out name and val for each col on the row
@@ -53,6 +54,18 @@ int open_db(void)
         return 1;
     }
     printf("'%s' table created successfully master weasel\n", todos_table);
+
+    // create sessions table
+    sql = "CREATE TABLE IF NOT EXISTS sessions (sid TEXT PRIMARY KEY, session TEXT NOT NULL, expire TIMESTAMP NOT NULL);";
+    return_code = sqlite3_exec(db, sql, 0, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "sessions create table error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
+    }
+    printf("'%s' table created successfully master weasel\n", sessions_table);
 
     return 0;
 }
@@ -175,6 +188,8 @@ int remove_completed_todo(int *owner_id, int *completed_todo)
     return 0;
 }
 
+// session ops
+
 // show table
 int show_data_db(void)
 {
@@ -190,7 +205,7 @@ int show_data_db(void)
 }
 
 // final shutdown db
-int close_db(void)
+int close_db(db)
 {
     return sqlite3_close(db);
     return 0;

@@ -9,7 +9,7 @@
 #include <string.h>             /* strlen               */
 #include <openssl/core_names.h> /* OSSL_KDF_*           */
 #include <openssl/params.h>     /* OSSL_PARAM_*         */
-#include <openssl/thread.h>     /* OSSL_set_max_threads */
+// #include <openssl/thread.h>     /* OSSL_set_max_threads */
 #include <openssl/kdf.h> /* EVP_KDF_*            */
 
 // generate random initialization vector/ salt to ensure that each encrypted message is different
@@ -25,7 +25,7 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
 
 // Argon2
 // hash that derives a key from a password using a salt and iteration count
-int argon_go_vroom(char *pwd, char *salt)
+int argon_go_vroom(/* char *pwd[], char *salt[] */)
 {
     int retval = 1;
     EVP_KDF *kdf = NULL;
@@ -34,7 +34,7 @@ int argon_go_vroom(char *pwd, char *salt)
     /* argon2 params, please refer to RFC9106 for recommended defaults */
     // uint32_t lanes = 2, threads = 2, memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
-    char pwd = "inwonderland", salt = "saltsalt";
+    char pwd[] = "inwonderland", salt[] = "saltsalt";
     /* derive result */
     size_t outlen = 128;
     unsigned char result[outlen];
@@ -57,7 +57,7 @@ int argon_go_vroom(char *pwd, char *salt)
     {
         goto fail;
     };
-    if ((kctx = EVP_KDF_CTX_new(kdf, NULL)) == NULL)
+    if ((kctx = EVP_KDF_CTX_new(kdf)) == NULL)
     {
         goto fail;
     };
@@ -79,7 +79,7 @@ fail:
 
 // encryptor
 // 1 = encry, 0 = decry
-int encryptor(FILE *in, FILE *out, int *do_crypt)
+int encryptor(FILE *in, FILE *out, int do_crypt)
 {
     /* Allow enough space in output buffer for additional block*/
     unsigned char inbuf[1024], outbuf[1024 + EVP_MAX_BLOCK_LENGTH];
@@ -145,6 +145,7 @@ int encryptor(FILE *in, FILE *out, int *do_crypt)
     EVP_CIPHER_CTX_free(ctx);
     return 1;
 }
+
 
 // docs: https://www.openssl.org/docs/man3.1/man3/EVP_CipherInit_ex2.html
 

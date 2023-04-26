@@ -13,7 +13,7 @@ import profileRouter from "./routes/profile";
 import appRouter from "./routes/app";
 import indexRouter from "./routes/index";
 
-import { openDb, getUserName } from "./models/db";
+import { openDb, getUserName, customSqLiteStore, closeDb } from "./models/db";
 import { comparePassword } from "./models/encryption";
 
 dotenv.config();
@@ -48,7 +48,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    // cookie: { secure: false },
+    store: new customSqLiteStore(),
   })
 );
 app.use(passport.initialize());
@@ -56,7 +56,8 @@ app.use(passport.authenticate("session"));
 // define passport strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    if (openDb()) {
+    let db = openDb();
+    if (db) {
       try {
         const user = await getUserName(username);
         if (!user) {
@@ -67,7 +68,7 @@ passport.use(
 
         const isPasswordMatched = comparePassword(
           password,
-          user.hashedPassword
+          user.password
         );
         if (!isPasswordMatched) {
           return done(null, false, {
@@ -80,6 +81,7 @@ passport.use(
         return done(err);
       }
     }
+    closeDb(db);
   })
 );
 // serialize and deserialize user
