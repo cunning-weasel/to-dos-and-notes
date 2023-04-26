@@ -8,6 +8,8 @@
     "start": "nodemon ./dist/app.js"
   },
   "dependencies": {
+    "@types/connect-ensure-login": "^0.1.7",
+    "connect-ensure-login": "^0.1.1",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
