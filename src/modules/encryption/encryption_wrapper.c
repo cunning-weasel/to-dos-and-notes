@@ -9,11 +9,8 @@
 #include <string.h>             /* strlen               */
 #include <openssl/core_names.h> /* OSSL_KDF_*           */
 #include <openssl/params.h>     /* OSSL_PARAM_*         */
-// #include <openssl/thread.h>     /* OSSL_set_max_threads */
+#include <openssl/thread.h>     /* OSSL_set_max_threads */
 #include <openssl/kdf.h> /* EVP_KDF_*            */
-
-// apt install libssl-dev
-// apt install openssl
 
 // generate random initialization vector/ salt to ensure that each encrypted message is different
 int generate_random_iv(unsigned char *iv, size_t iv_len)

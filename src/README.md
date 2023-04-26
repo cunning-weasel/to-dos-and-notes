@@ -5,6 +5,8 @@ TO-DO's
 
 ssl stuff
 sudo apt install libssl-dev
+sudo apt install openssl
+
 
 sqlite stuff
 sudo apt install sqlite3
