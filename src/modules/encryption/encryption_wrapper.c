@@ -146,7 +146,6 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
     return 1;
 }
 
-
 // docs: https://www.openssl.org/docs/man3.1/man3/EVP_CipherInit_ex2.html
 
 // compile: gcc -o encryp_wrapper encryp_wrapper.c -lssl -lcrypto

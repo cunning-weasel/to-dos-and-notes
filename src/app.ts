@@ -66,10 +66,7 @@ passport.use(
           });
         }
 
-        const isPasswordMatched = comparePassword(
-          password,
-          user.password
-        );
+        const isPasswordMatched = comparePassword(password, user.password);
         if (!isPasswordMatched) {
           return done(null, false, {
             message: "Incorrect password.",
@@ -91,7 +88,7 @@ passport.serializeUser((user: any, done) => {
   });
 });
 passport.deserializeUser(async (user: any, done) => {
-  process.nextTick(function () {
+  process.nextTick(() => {
     done(null, user);
   });
 });

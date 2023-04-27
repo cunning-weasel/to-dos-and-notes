@@ -52,14 +52,15 @@ app.use("/public", express_1.default.static(path_1.default.join(__dirname, "publ
 app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false, // don't create session until something stored
-    // cookie: { secure: false },
+    saveUninitialized: false,
+    store: new db_1.customSqLiteStore(),
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.authenticate("session"));
 // define passport strategy
 passport_1.default.use(new passport_local_1.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
-    if ((0, db_1.openDb)()) {
+    let db = (0, db_1.openDb)();
+    if (db) {
         try {
             const user = yield (0, db_1.getUserName)(username);
             if (!user) {
@@ -67,7 +68,7 @@ passport_1.default.use(new passport_local_1.Strategy((username, password, done) 
                     message: "Incorrect username.",
                 });
             }
-            const isPasswordMatched = (0, encryption_1.comparePassword)(password, user.hashedPassword);
+            const isPasswordMatched = (0, encryption_1.comparePassword)(password, user.password);
             if (!isPasswordMatched) {
                 return done(null, false, {
                     message: "Incorrect password.",
@@ -80,6 +81,7 @@ passport_1.default.use(new passport_local_1.Strategy((username, password, done) 
             return done(err);
         }
     }
+    (0, db_1.closeDb)(db);
 })));
 // serialize and deserialize user
 passport_1.default.serializeUser((user, done) => {
@@ -88,7 +90,7 @@ passport_1.default.serializeUser((user, done) => {
     });
 });
 passport_1.default.deserializeUser((user, done) => __awaiter(void 0, void 0, void 0, function* () {
-    process.nextTick(function () {
+    process.nextTick(() => {
         done(null, user);
     });
 }));
