@@ -1,13 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { ensureLoggedIn } from "connect-ensure-login";
 
 import { getUserId } from "../models/db";
 import {
   comparePassword,
   // token? here usually jwt?
 } from "../models/encryption";
-
-const ensureLogIn = ensureLoggedIn();
 
 // todo/ note data
 export const getToDo = async (

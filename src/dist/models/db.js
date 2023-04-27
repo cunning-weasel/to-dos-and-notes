@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.customSqLiteStore = exports.removeCompletedToDo = exports.removeToDo = exports.updateToDo = exports.insertIntoToDos = exports.getUserId = exports.getUserName = exports.createUser = exports.showDbData = exports.closeDb = exports.openDb = void 0;
-const ffi_napi_1 = __importDefault(require("ffi-napi"));
 // function signatures
+const ffi_napi_1 = __importDefault(require("ffi-napi"));
 const db_lib = ffi_napi_1.default.Library("../modules/sqlite/output_sqlite_libc.so", {
     open_db: ["int", ["void"]],
     close_db: ["int", ["pointer"]],

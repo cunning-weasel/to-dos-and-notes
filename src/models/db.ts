@@ -1,11 +1,10 @@
-import { error } from "console";
 import { Request } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { Store, SessionData, Session } from "express-session";
 
-import ffi from "ffi-napi";
 import { ParsedQs } from "qs";
 // function signatures
+import ffi from "ffi-napi";
 const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
   open_db: ["int", ["void"]],
   close_db: ["int", ["pointer"]],
@@ -83,13 +82,16 @@ export const removeCompletedToDo = (id: number, completed: number): number => {
 };
 
 // store ops
-// need almost all for custom store impl. thank gawd for .ts auto-everything
+// need all methods for custom store impl.
+// thank gawd for .ts auto-everything
 export class customSqLiteStore implements Store {
   // start custom impl
   get = async (
     sid: string,
     callback: (err: any, session?: SessionData | null) => void
   ): Promise<void> => {
+    // should generate sid here?
+    //
     try {
       const session = await db_lib.load_session(sid);
       callback(session);
@@ -105,7 +107,7 @@ export class customSqLiteStore implements Store {
   ): Promise<void> => {
     // update && insert session
     try {
-      await db_lib.upsert_session(sid, session.cookie.maxAge);
+      await db_lib.upsert_session(sid, session.cookie);
       callback?.();
     } catch (err) {
       callback?.(err);

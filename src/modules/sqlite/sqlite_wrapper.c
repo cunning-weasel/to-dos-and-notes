@@ -70,6 +70,47 @@ int open_db(void)
     return 0;
 }
 
+// sessions ops
+void load_session(char sid){
+        sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions ='%q';", sid);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL sid_insert_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data sid_insert success master weasel\n");
+    }
+    return 0;
+}
+
+void upsert_session(char sid, char session){
+        sql = sqlite3_mprintf("UPDATE sessions SET session ='%q' WHERE sid ='%q';", sid, session);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL upsert_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data upsert_success master weasel\n");
+    }
+    return 0;
+}
+
+void update_session(char sid, char session){
+
+}
+
+void delete_session(char sid){
+
+}
+
+
+
 // create an initial user (username: alice, password: inwonderland) with added salt
 int create_user(char *user_name, char *hashed_password, char *salt[])
 {
@@ -187,8 +228,6 @@ int remove_completed_todo(int *owner_id, int *completed_todo)
     }
     return 0;
 }
-
-// session ops
 
 // show table
 int show_data_db(void)

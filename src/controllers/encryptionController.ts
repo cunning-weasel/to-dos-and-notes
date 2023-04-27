@@ -30,3 +30,4 @@ export const login = async (req: Request, res: Response) => {
     throw new Error(error);
   }
 };
+
