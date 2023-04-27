@@ -71,8 +71,9 @@ int open_db(void)
 }
 
 // sessions ops
-void load_session(char sid){
-        sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions ='%q';", sid);
+void load_session(char sid)
+{
+    sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions ='%q';", sid);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -86,8 +87,9 @@ void load_session(char sid){
     return 0;
 }
 
-void upsert_session(char sid, char session){
-        sql = sqlite3_mprintf("UPDATE sessions SET session ='%q' WHERE sid ='%q';", sid, session);
+void upsert_session(char sid, char session)
+{
+    sql = sqlite3_mprintf("UPDATE sessions SET session ='%q' WHERE sid ='%q';", sid, session);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -101,15 +103,17 @@ void upsert_session(char sid, char session){
     return 0;
 }
 
-void update_session(char sid, char session){
-
+void update_session(char sid, char session)
+{
+    // INSERT INTO sessions (sid, expires, data) VALUES (?, ?, ?);
+    // SELECT data FROM sessions WHERE sid = ? AND expires > datetime('now');
+    // UPDATE sessions SET data = ?, expires = ? WHERE sid = ?;
 }
 
-void delete_session(char sid){
-
+void delete_session(char sid)
+{
+    // DELETE FROM sessions WHERE sid = ?;
 }
-
-
 
 // create an initial user (username: alice, password: inwonderland) with added salt
 int create_user(char *user_name, char *hashed_password, char *salt[])
