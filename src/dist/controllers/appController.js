@@ -10,9 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeToDo = exports.patchToDo = exports.postToDO = exports.getToDo = void 0;
-const connect_ensure_login_1 = require("connect-ensure-login");
 const db_1 = require("../models/db");
-const ensureLogIn = (0, connect_ensure_login_1.ensureLoggedIn)();
 // todo/ note data
 const getToDo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

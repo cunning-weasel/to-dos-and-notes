@@ -25,14 +25,16 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
 
 // Argon2
 // hash that derives a key from a password using a salt and iteration count
-int argon_go_vroom(/* char *pwd[], char *salt[] */)
+int argon_go_vroom(char *pwd[], char *salt[])
 {
     int retval = 1;
     EVP_KDF *kdf = NULL;
     EVP_KDF_CTX *kctx = NULL;
     OSSL_PARAM params[6], *p = params;
     /* argon2 params, please refer to RFC9106 for recommended defaults */
-    // uint32_t lanes = 2, threads = 2, memcost = 65536;
+    uint32_t lanes = 2,
+            //  threads = 2,
+             memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
     char pwd[] = "inwonderland", salt[] = "saltsalt";
     /* derive result */
@@ -49,8 +51,8 @@ int argon_go_vroom(/* char *pwd[], char *salt[] */)
     // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_THREADS, &threads);
     // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_LANES, &lanes);
     // *p++ = OSSL_PARAM_construct_uint32(OSSL_KDF_PARAM_ARGON2_MEMCOST, &memcost);
-    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt, strlen(salt));   // removed unnecessary cast
-    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_PASSWORD, pwd, strlen(pwd)); // removed unnecessary cast
+    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_SALT, salt, strlen(salt));   // removed cast
+    *p++ = OSSL_PARAM_construct_octet_string(OSSL_KDF_PARAM_PASSWORD, pwd, strlen(pwd)); // removed cast
     *p++ = OSSL_PARAM_construct_end();
 
     if ((kdf = EVP_KDF_fetch(NULL, "ARGON2D", NULL)) == NULL)
@@ -148,8 +150,13 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
 
 // docs: https://www.openssl.org/docs/man3.1/man3/EVP_CipherInit_ex2.html
 
-// compile: gcc -o encryp_wrapper encryp_wrapper.c -lssl -lcrypto
+// compile: gcc -o encryption_wrapper encryption_wrapper.c -lssl -lcrypto
 // run ./ecryp_wrapper
+
+// same but for ffi lib (-03 max perf, maybe less at first for bugs?)
+// ie
+// compile lib ffi:
+//  gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -O3
 
 // ...
 

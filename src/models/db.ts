@@ -88,6 +88,7 @@ export class customSqLiteStore implements Store {
   // start custom impl
   get = async (
     sid: string,
+
     callback: (err: any, session?: SessionData | null) => void
   ): Promise<void> => {
     // should generate sid here?
@@ -107,7 +108,7 @@ export class customSqLiteStore implements Store {
   ): Promise<void> => {
     // update && insert session
     try {
-      await db_lib.upsert_session(sid, session.cookie);
+      await db_lib.upsert_session(sid, session);
       callback?.();
     } catch (err) {
       callback?.(err);

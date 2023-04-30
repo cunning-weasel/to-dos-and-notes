@@ -78,11 +78,14 @@ const removeCompletedToDo = (id, completed) => {
 };
 exports.removeCompletedToDo = removeCompletedToDo;
 // store ops
-// need almost all for custom store impl. thank gawd for .ts auto-everything
+// need all methods for custom store impl.
+// thank gawd for .ts auto-everything
 class customSqLiteStore {
     constructor() {
         // start custom impl
         this.get = (sid, callback) => __awaiter(this, void 0, void 0, function* () {
+            // should generate sid here?
+            //
             try {
                 const session = yield db_lib.load_session(sid);
                 callback(session);
@@ -94,7 +97,7 @@ class customSqLiteStore {
         this.set = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
             // update && insert session
             try {
-                yield db_lib.upsert_session(sid, session.cookie.maxAge);
+                yield db_lib.upsert_session(sid, session);
                 callback === null || callback === void 0 ? void 0 : callback();
             }
             catch (err) {

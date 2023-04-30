@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <sqlite3.h>
+#include <time.h>
 
 sqlite3 *db;
 char *zErrMsg = 0;
@@ -71,25 +72,27 @@ int open_db(void)
 }
 
 // sessions ops
-void load_session(char sid)
+void load_session(char *sid, char *session, char *expire)
 {
-    sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions ='%q';", sid);
+    sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions (sid, session, expire) VALUES ('%q', '%q', '%q');", sid, session, expire);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
-        fprintf(stderr, "SQL sid_insert_error master weasel: %s\n", zErrMsg);
+        fprintf(stderr, "SQL insert/load_error master weasel: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
     }
     else
     {
-        fprintf(stdout, "Data sid_insert success master weasel\n");
+        fprintf(stdout, "Data insert/load success master weasel\n");
     }
     return 0;
 }
 
-void upsert_session(char sid, char session)
+void upsert_session(char *sid, char *session)
 {
-    sql = sqlite3_mprintf("UPDATE sessions SET session ='%q' WHERE sid ='%q';", sid, session);
+    // need to add expire timestamp in milliseconds
+    // sql = "SELECT session FROM sessions WHERE sid='%q' AND expire > DATE('now');", sid, expire;
+    sql = sqlite3_mprintf("UPDATE sessions SET session='%q' WHERE sid='%q';", sid, session);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -103,16 +106,36 @@ void upsert_session(char sid, char session)
     return 0;
 }
 
-void update_session(char sid, char session)
+void update_session(char *sid, char *session, char *expire)
 {
-    // INSERT INTO sessions (sid, expires, data) VALUES (?, ?, ?);
-    // SELECT data FROM sessions WHERE sid = ? AND expires > datetime('now');
-    // UPDATE sessions SET data = ?, expires = ? WHERE sid = ?;
+    sql = sqlite3_mprintf("UPDATE sessions SET session='%q', expire='%q' WHERE sid='%q';", sid, session, expire);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL upsert_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data upsert_success master weasel\n");
+    }
+    return 0;
 }
 
-void delete_session(char sid)
+void delete_session(char *sid)
 {
-    // DELETE FROM sessions WHERE sid = ?;
+    sql = sqlite3_mprintf("DELETE FROM sessions WHERE sid='%q';", sid);
+    return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
+    if (return_code != SQLITE_OK)
+    {
+        fprintf(stderr, "SQL delete_error master weasel: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+    }
+    else
+    {
+        fprintf(stdout, "Data delete_success master weasel\n");
+    }
+    return 0;
 }
 
 // create an initial user (username: alice, password: inwonderland) with added salt
@@ -153,7 +176,7 @@ int username_get(char *user_name)
 // getId
 int get_by_owner_id(int *owner_id)
 {
-    sql = sqlite3_mprintf("SELECT * FROM todos WHERE owner_id ='%q';", owner_id);
+    sql = sqlite3_mprintf("SELECT * FROM todos WHERE owner_id='%q';", owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -170,7 +193,7 @@ int get_by_owner_id(int *owner_id)
 // patch/ put ops
 int update_todo(char *title, int *completed, int *id, int *owner_id)
 {
-    sql = sqlite3_mprintf("UPDATE todos SET title ='%q', completed ='%q' WHERE id ='%q' AND owner_id ='%q';", title, completed, id, owner_id);
+    sql = sqlite3_mprintf("UPDATE todos SET title ='%q', completed='%q' WHERE id ='%q' AND owner_id ='%q';", title, completed, id, owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -203,7 +226,7 @@ int insert_data_into_todos(int *owner_id, char *title, int *completed)
 // rm ops
 int remove_todo(int *id, int *owner_id)
 {
-    sql = sqlite3_mprintf("DELETE FROM todos WHERE id ='%q' AND owner_id ='%q';", id, owner_id);
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE id='%q' AND owner_id='%q';", id, owner_id);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -219,7 +242,7 @@ int remove_todo(int *id, int *owner_id)
 
 int remove_completed_todo(int *owner_id, int *completed_todo)
 {
-    sql = sqlite3_mprintf("DELETE FROM todos WHERE owner_id ='%q' AND completed ='%q';", owner_id, completed_todo);
+    sql = sqlite3_mprintf("DELETE FROM todos WHERE owner_id='%q' AND completed='%q';", owner_id, completed_todo);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
     if (return_code != SQLITE_OK)
     {
@@ -260,8 +283,10 @@ int close_db(db)
 // install sqlite stuff linux
 // sudo apt-get install sqlite3 libsqlite3-dev
 
-// compile to shared library for ffi call - no need to export
-// gcc -shared -o mylib.so sqlite.c encryption.c -lsqlite3
+// same but for ffi lib (-03 max perf, maybe less at first for bugs?)
+// i.e
+// compile lib ffi:
+//  gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -O3
 
 // ...
 
