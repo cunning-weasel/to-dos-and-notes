@@ -59,8 +59,7 @@ app.use(passport_1.default.initialize());
 app.use(passport_1.default.authenticate("session"));
 // define passport strategy
 passport_1.default.use(new passport_local_1.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
-    let db = (0, db_1.openDb)();
-    if (db) {
+    if ((0, db_1.openDb)()) {
         try {
             const user = yield (0, db_1.getUserName)(username);
             if (!user) {
@@ -68,7 +67,7 @@ passport_1.default.use(new passport_local_1.Strategy((username, password, done) 
                     message: "Incorrect username.",
                 });
             }
-            const isPasswordMatched = (0, encryption_1.comparePassword)(password, user.password);
+            const isPasswordMatched = (0, encryption_1.comparePassword)(password, username);
             if (!isPasswordMatched) {
                 return done(null, false, {
                     message: "Incorrect password.",
@@ -81,7 +80,7 @@ passport_1.default.use(new passport_local_1.Strategy((username, password, done) 
             return done(err);
         }
     }
-    (0, db_1.closeDb)(db);
+    (0, db_1.closeDb)();
 })));
 // serialize and deserialize user
 passport_1.default.serializeUser((user, done) => {

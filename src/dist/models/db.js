@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.customSqLiteStore = exports.removeCompletedToDo = exports.removeToDo = exports.updateToDo = exports.insertIntoToDos = exports.getUserId = exports.getUserName = exports.createUser = exports.showDbData = exports.closeDb = exports.openDb = void 0;
 // function signatures
 const ffi_napi_1 = __importDefault(require("ffi-napi"));
-const db_lib = ffi_napi_1.default.Library("../modules/sqlite/output_sqlite_libc.so", {
+const db_lib = ffi_napi_1.default.Library("../modules/sqlite/sqlite_wrapper_libc.so", {
     open_db: ["int", ["void"]],
-    close_db: ["int", ["pointer"]],
+    close_db: ["int", ["void"]],
     show_data_db: ["int", ["void"]],
     // user ops
     create_user: ["int", ["string", "string", "string"]],
@@ -39,8 +39,8 @@ const openDb = () => {
     return db_lib.open_db();
 };
 exports.openDb = openDb;
-const closeDb = (pointer) => {
-    return db_lib.close_db(pointer);
+const closeDb = () => {
+    return db_lib.close_db();
 };
 exports.closeDb = closeDb;
 const showDbData = () => {
@@ -85,7 +85,7 @@ class customSqLiteStore {
         // start custom impl
         this.get = (sid, callback) => __awaiter(this, void 0, void 0, function* () {
             // should generate sid here?
-            //
+            // 
             try {
                 const session = yield db_lib.load_session(sid);
                 callback(session);
@@ -97,7 +97,7 @@ class customSqLiteStore {
         this.set = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
             // update && insert session
             try {
-                yield db_lib.upsert_session(sid, session);
+                yield db_lib.upsert_session(sid, session.cookie.maxAge);
                 callback === null || callback === void 0 ? void 0 : callback();
             }
             catch (err) {

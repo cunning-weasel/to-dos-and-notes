@@ -17,6 +17,7 @@
     "express-validator": "^6.15.0",
     "ffi-napi": "^4.0.3",
     "helmet": "^6.1.5",
+    "memorystore": "^1.6.7",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },

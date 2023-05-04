@@ -85,7 +85,6 @@ void load_session(char *sid, char *session, char *expire)
     {
         fprintf(stdout, "Data insert/load success master weasel\n");
     }
-    return 0;
 }
 
 void upsert_session(char *sid, char *session)
@@ -103,7 +102,6 @@ void upsert_session(char *sid, char *session)
     {
         fprintf(stdout, "Data upsert_success master weasel\n");
     }
-    return 0;
 }
 
 void update_session(char *sid, char *session, char *expire)
@@ -119,7 +117,6 @@ void update_session(char *sid, char *session, char *expire)
     {
         fprintf(stdout, "Data upsert_success master weasel\n");
     }
-    return 0;
 }
 
 void delete_session(char *sid)
@@ -135,7 +132,6 @@ void delete_session(char *sid)
     {
         fprintf(stdout, "Data delete_success master weasel\n");
     }
-    return 0;
 }
 
 // create an initial user (username: alice, password: inwonderland) with added salt
@@ -271,9 +267,9 @@ int show_data_db(void)
 }
 
 // final shutdown db
-int close_db(db)
+int close_db(void)
 {
-    return sqlite3_close(db);
+    sqlite3_close(db);
     return 0;
 }
 

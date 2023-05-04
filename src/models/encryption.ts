@@ -21,3 +21,4 @@ export const comparePassword = (
 ): boolean => {
   return encryptedPw === encryptedPwDb ? true : false;
 };
+

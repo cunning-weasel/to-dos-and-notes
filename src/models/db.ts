@@ -1,13 +1,16 @@
 import { Request } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { Store, SessionData, Session } from "express-session";
+// for prod?
+// const MemoryStore = require("memorystore")(Session);
 
 import { ParsedQs } from "qs";
+
 // function signatures
 import ffi from "ffi-napi";
-const db_lib = ffi.Library("../modules/sqlite/output_sqlite_libc.so", {
+const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
   open_db: ["int", ["void"]],
-  close_db: ["int", ["pointer"]],
+  close_db: ["int", ["void"]],
   show_data_db: ["int", ["void"]],
   // user ops
   create_user: ["int", ["string", "string", "string"]],
@@ -30,8 +33,8 @@ export const openDb = (): number => {
   return db_lib.open_db();
 };
 
-export const closeDb = (pointer: any): number => {
-  return db_lib.close_db(pointer);
+export const closeDb = (): number => {
+  return db_lib.close_db();
 };
 
 export const showDbData = (): number => {
@@ -88,11 +91,10 @@ export class customSqLiteStore implements Store {
   // start custom impl
   get = async (
     sid: string,
-
     callback: (err: any, session?: SessionData | null) => void
   ): Promise<void> => {
     // should generate sid here?
-    //
+    // 
     try {
       const session = await db_lib.load_session(sid);
       callback(session);
@@ -108,7 +110,7 @@ export class customSqLiteStore implements Store {
   ): Promise<void> => {
     // update && insert session
     try {
-      await db_lib.upsert_session(sid, session);
+      await db_lib.upsert_session(sid, session.cookie.maxAge);
       callback?.();
     } catch (err) {
       callback?.(err);

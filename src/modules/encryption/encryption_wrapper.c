@@ -32,9 +32,9 @@ int argon_go_vroom(char *pwd[], char *salt[])
     EVP_KDF_CTX *kctx = NULL;
     OSSL_PARAM params[6], *p = params;
     /* argon2 params, please refer to RFC9106 for recommended defaults */
-    uint32_t lanes = 2,
-            //  threads = 2,
-             memcost = 65536;
+    // uint32_t lanes = 2,
+    //  threads = 2,
+    //  memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
     char pwd[] = "inwonderland", salt[] = "saltsalt";
     /* derive result */
@@ -69,6 +69,8 @@ int argon_go_vroom(char *pwd[], char *salt[])
     };
     printf("Output = %s\n", OPENSSL_buf2hexstr(result, outlen));
     retval = 0;
+    // return hashedPassword and salt
+
 
 fail:
     EVP_KDF_free(kdf);
@@ -76,7 +78,6 @@ fail:
     // OSSL_set_max_threads(0);
 
     return retval;
-    // return hashedPassword and salt
 }
 
 // encryptor
@@ -114,7 +115,7 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
 
     while (1)
     {
-        if (do_crypt) // swap for crypt select
+        if (do_crypt)
         {
             inlen = fread(inbuf, 1, 1024, in);
         }

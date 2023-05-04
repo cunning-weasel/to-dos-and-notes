@@ -56,8 +56,7 @@ app.use(passport.authenticate("session"));
 // define passport strategy
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    let db = openDb();
-    if (db) {
+    if (openDb()) {
       try {
         const user = await getUserName(username);
         if (!user) {
@@ -66,7 +65,7 @@ passport.use(
           });
         }
 
-        const isPasswordMatched = comparePassword(password, user.password);
+        const isPasswordMatched = comparePassword(password, username);
         if (!isPasswordMatched) {
           return done(null, false, {
             message: "Incorrect password.",
@@ -78,7 +77,7 @@ passport.use(
         return done(err);
       }
     }
-    closeDb(db);
+    closeDb();
   })
 );
 // serialize and deserialize user
