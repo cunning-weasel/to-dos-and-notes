@@ -7,6 +7,7 @@ import { Store, SessionData, Session } from "express-session";
 import { ParsedQs } from "qs";
 
 // function signatures
+// src/modules/sqlite/sqlite_wrapper_libc.so
 import ffi from "ffi-napi";
 const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
   open_db: ["int", ["void"]],

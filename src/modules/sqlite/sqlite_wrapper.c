@@ -1,3 +1,7 @@
+// TO-DO
+// need to use prepared statements - where can they
+// be avoided?
+
 #include <stdio.h>
 #include <sqlite3.h>
 #include <time.h>
@@ -282,7 +286,10 @@ int close_db(void)
 // same but for ffi lib (-03 max perf, maybe less at first for bugs?)
 // i.e
 // compile lib ffi:
-//  gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -O3
+//  gcc -shared -fpic sqlite_wrapper.c -o sqlite_wrapper_libc.so -O3
+// NOTE!!
+// might need to include lib flag:
+// gcc -shared -fpic sqlite_wrapper.c -o sqlite_wrapper_libc.so -lsqlite3
 
 // ...
 

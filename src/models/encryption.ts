@@ -1,6 +1,6 @@
 import ffi from "ffi-napi";
 
-const encryption_lib = ffi.Library("./modules/encryption_lib.so", {
+const encryption_lib = ffi.Library("modules/encryption/encryption_wrapper_libc.so", {
   encryptor: ["int", ["string", "string", "int"]],
   // ...
 });
