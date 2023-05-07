@@ -23,6 +23,8 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
     return 0;
 }
 
+// TODO random UUIDs for session ID in db?
+
 // Argon2
 // hash that derives a key from a password using a salt and iteration count
 int argon_go_vroom(char *pwd[], char *salt[])
