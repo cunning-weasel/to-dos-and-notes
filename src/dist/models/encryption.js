@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.comparePassword = exports.decrypt = exports.encrypt = void 0;
 const ffi_napi_1 = __importDefault(require("ffi-napi"));
-const encryption_lib = ffi_napi_1.default.Library("./modules/encryption_lib.so", {
+const encryption_lib = ffi_napi_1.default.Library("modules/encryption/encryption_wrapper_libc.so", {
     encryptor: ["int", ["string", "string", "int"]],
     // ...
 });

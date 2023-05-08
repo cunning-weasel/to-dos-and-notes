@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.customSqLiteStore = exports.removeCompletedToDo = exports.removeToDo = exports.updateToDo = exports.insertIntoToDos = exports.getUserId = exports.getUserName = exports.createUser = exports.showDbData = exports.closeDb = exports.openDb = void 0;
 // function signatures
 // src/modules/sqlite/sqlite_wrapper_libc.so
-// /home/paul/workspace/to-dos-and-notes/src/modules/sqlite/sqlite_wrapper_libc.so
 const ffi_napi_1 = __importDefault(require("ffi-napi"));
 const db_lib = ffi_napi_1.default.Library("modules/sqlite/sqlite_wrapper_libc.so", {
     open_db: ["int", ["void"]],

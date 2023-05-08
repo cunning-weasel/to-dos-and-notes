@@ -17,6 +17,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
 const express_session_1 = __importDefault(require("express-session"));
+const memorystore_1 = __importDefault(require("memorystore"));
 const path_1 = __importDefault(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -30,6 +31,8 @@ const encryption_1 = require("./models/encryption");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
+const MemoryStoreConstructor = (0, memorystore_1.default)(express_session_1.default);
+const memoryStore = new MemoryStoreConstructor();
 // view engine
 app.set("views", path_1.default.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -53,7 +56,9 @@ app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: new db_1.customSqLiteStore(),
+    store: new db_1.customSqLiteStore({
+        memoryStore: memoryStore, // cache layer above sqlite store
+    }),
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.authenticate("session"));

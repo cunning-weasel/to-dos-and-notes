@@ -20,8 +20,14 @@ import { comparePassword } from "./models/encryption";
 dotenv.config();
 const app = express();
 const port: string = process.env.PORT;
+
+// custom mem store
+const options: MemoryStoreOptions = {
+  checkPeriod: 10 * 60 * 1000, // Check for expired sessions every 10 minutes
+  maxAge: 30 * 60 * 1000, // Sessions expire after 30 minutes
+};
 const MemoryStoreConstructor = MemoryStore(session);
-const memoryStore = new MemoryStoreConstructor();
+const memoryStore = new MemoryStoreConstructor(options);
 
 // view engine
 app.set("views", path.join(__dirname, "views"));
@@ -101,6 +107,19 @@ passport.deserializeUser(async (user: any, done) => {
 app.use("/", indexRouter); // base page - login/ register
 app.use("/", profileRouter);
 app.use("/", appRouter);
+
+// last catch for errors
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error(err);
+    res.status(500).send("Internal server error master weasel");
+  }
+);
 
 app.listen(port, () => {
   console.log(`⚡️[weasel-server.ts]: running @ http://localhost:${port}`);

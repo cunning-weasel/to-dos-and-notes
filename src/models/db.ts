@@ -1,8 +1,6 @@
 import { Request } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { Store, SessionData, Session } from "express-session";
-// for prod?
-// const MemoryStore = require("memorystore")(Session);
 
 import { ParsedQs } from "qs";
 
