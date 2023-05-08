@@ -1,6 +1,5 @@
 // TO-DO
-// need to use prepared statements - where can they
-// be avoided?
+// need to use prepared statements - avoid sql injection
 
 #include <stdio.h>
 #include <sqlite3.h>

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
+import MemoryStore from "memorystore";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -19,6 +20,8 @@ import { comparePassword } from "./models/encryption";
 dotenv.config();
 const app = express();
 const port: string = process.env.PORT;
+const MemoryStoreConstructor = MemoryStore(session);
+const memoryStore = new MemoryStoreConstructor();
 
 // view engine
 app.set("views", path.join(__dirname, "views"));
@@ -48,7 +51,9 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    store: new customSqLiteStore(),
+    store: new customSqLiteStore({
+      memoryStore: memoryStore, // cache layer above sqlite store
+    }),
   })
 );
 app.use(passport.initialize());
