@@ -13,9 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.customSqLiteStore = exports.removeCompletedToDo = exports.removeToDo = exports.updateToDo = exports.insertIntoToDos = exports.getUserId = exports.getUserName = exports.createUser = exports.showDbData = exports.closeDb = exports.openDb = void 0;
-// function signatures
-// src/modules/sqlite/sqlite_wrapper_libc.so
 const ffi_napi_1 = __importDefault(require("ffi-napi"));
+// function signatures
 const db_lib = ffi_napi_1.default.Library("modules/sqlite/sqlite_wrapper_libc.so", {
     open_db: ["int", ["void"]],
     close_db: ["int", ["void"]],
@@ -38,6 +37,11 @@ const db_lib = ffi_napi_1.default.Library("modules/sqlite/sqlite_wrapper_libc.so
 // db ops
 const openDb = () => {
     return db_lib.open_db();
+    // try {
+    //   await db_lib.open_db();
+    // } catch(err) {
+    //   return err;
+    // }
 };
 exports.openDb = openDb;
 const closeDb = () => {
@@ -86,10 +90,10 @@ class customSqLiteStore {
         // start custom impl
         this.get = (sid, callback) => __awaiter(this, void 0, void 0, function* () {
             // should generate sid here?
-            // 
+            //
             try {
                 const session = yield db_lib.load_session(sid);
-                callback(session);
+                callback(null, session);
             }
             catch (err) {
                 callback(err);

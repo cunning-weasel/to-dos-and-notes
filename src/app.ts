@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
-import MemoryStore from "memorystore";
+import MemoryStore, { MemoryStoreOptions } from "memorystore";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -21,10 +21,10 @@ dotenv.config();
 const app = express();
 const port: string = process.env.PORT;
 
-// custom mem store
+// mem store
 const options: MemoryStoreOptions = {
-  checkPeriod: 10 * 60 * 1000, // Check for expired sessions every 10 minutes
-  maxAge: 30 * 60 * 1000, // Sessions expire after 30 minutes
+  checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+  maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
 };
 const MemoryStoreConstructor = MemoryStore(session);
 const memoryStore = new MemoryStoreConstructor(options);
@@ -58,7 +58,7 @@ app.use(
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     store: new customSqLiteStore({
-      memoryStore: memoryStore, // cache layer above sqlite store
+      memoryStore: memoryStore, // cache-layer above sqlite store
     }),
   })
 );

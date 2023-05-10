@@ -31,8 +31,13 @@ const encryption_1 = require("./models/encryption");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
+// mem store
+const options = {
+    checkPeriod: 20 * 60 * 1000,
+    maxAge: 50 * 60 * 1000, // Sessions expire after 50 minutes
+};
 const MemoryStoreConstructor = (0, memorystore_1.default)(express_session_1.default);
-const memoryStore = new MemoryStoreConstructor();
+const memoryStore = new MemoryStoreConstructor(options);
 // view engine
 app.set("views", path_1.default.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -57,7 +62,7 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: false,
     store: new db_1.customSqLiteStore({
-        memoryStore: memoryStore, // cache layer above sqlite store
+        memoryStore: memoryStore, // cache-layer above sqlite store
     }),
 }));
 app.use(passport_1.default.initialize());
@@ -102,6 +107,11 @@ passport_1.default.deserializeUser((user, done) => __awaiter(void 0, void 0, voi
 app.use("/", index_1.default); // base page - login/ register
 app.use("/", profile_1.default);
 app.use("/", app_1.default);
+// last catch for errors
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(500).send("Internal server error master weasel");
+});
 app.listen(port, () => {
     console.log(`⚡️[weasel-server.ts]: running @ http://localhost:${port}`);
 });

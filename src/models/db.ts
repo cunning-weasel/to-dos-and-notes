@@ -4,9 +4,9 @@ import { Store, SessionData, Session } from "express-session";
 
 import { ParsedQs } from "qs";
 
-// function signatures
-// src/modules/sqlite/sqlite_wrapper_libc.so
 import ffi from "ffi-napi";
+
+// function signatures
 const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
   open_db: ["int", ["void"]],
   close_db: ["int", ["void"]],
@@ -30,6 +30,11 @@ const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
 // db ops
 export const openDb = (): number => {
   return db_lib.open_db();
+  // try {
+  //   await db_lib.open_db();
+  // } catch(err) {
+  //   return err;
+  // }
 };
 
 export const closeDb = (): number => {
@@ -90,15 +95,15 @@ export class customSqLiteStore implements Store {
   // start custom impl
   get = async (
     sid: string,
-    callback: (err: any, session?: SessionData | null) => void
+    callback: (err: any, session: SessionData | null) => void
   ): Promise<void> => {
     // should generate sid here?
-    // 
+    //
     try {
       const session = await db_lib.load_session(sid);
-      callback(session);
+      callback(null, session);
     } catch (err) {
-      callback(err);
+      callback(err, session);
     }
   };
 

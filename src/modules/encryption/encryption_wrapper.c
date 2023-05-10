@@ -73,12 +73,10 @@ int argon_go_vroom(char *pwd[], char *salt[])
     retval = 0;
     // return hashedPassword and salt
 
-
 fail:
     EVP_KDF_free(kdf);
     EVP_KDF_CTX_free(kctx);
     // OSSL_set_max_threads(0);
-
     return retval;
 }
 
@@ -163,7 +161,6 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
 // NOTE!!
 // might need to include lib flag:
 // gcc -shared -fpic sqlite_wrapper.c -o sqlite_wrapper_libc.so -lsqlite3
-
 
 // ...
 
