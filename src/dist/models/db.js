@@ -96,7 +96,7 @@ class customSqLiteStore {
                 callback(null, session);
             }
             catch (err) {
-                callback(err);
+                callback(err, session);
             }
         });
         this.set = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {

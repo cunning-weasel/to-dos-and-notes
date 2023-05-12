@@ -28,64 +28,105 @@ const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
 });
 
 // db ops
-export const openDb = (): number => {
-  return db_lib.open_db();
-  // try {
-  //   await db_lib.open_db();
-  // } catch(err) {
-  //   return err;
-  // }
+export const openDb = async (): Promise<number> => {
+  try {
+    await db_lib.open_db();
+  } catch (err) {
+    return err;
+  }
 };
 
-export const closeDb = (): number => {
-  return db_lib.close_db();
+export const closeDb = async (): Promise<number> => {
+  try {
+    await db_lib.close_db();
+  } catch (err) {
+    return err;
+  }
 };
 
-export const showDbData = (): number => {
-  return db_lib.show_data_db();
+export const showDbData = async (): Promise<number> => {
+  try {
+    await db_lib.show_data_db();
+  } catch (err) {
+    return err;
+  }
 };
 
 // user ops
-export const createUser = (
+export const createUser = async (
   username: string,
   hashedPassWord: string,
   salt: string
-): number => {
-  return db_lib.create_user(username, hashedPassWord, salt);
+): Promise<number> => {
+  try {
+    await db_lib.create_user(username, hashedPassWord, salt);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const getUserName = (username: string) => {
-  return db_lib.username_get(username);
+export const getUserName = async (username: string): Promise<number> => {
+  try {
+    await db_lib.username_get(username);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const getUserId = (id: number): number => {
-  return db_lib.get_by_owner_id(id);
+export const getUserId = async (id: number): Promise<number> => {
+  try {
+    await db_lib.get_by_owner_id(id);
+  } catch (err) {
+    return err;
+  }
 };
 
 // todo ops
-export const insertIntoToDos = (
+export const insertIntoToDos = async (
   id: number,
   title: string,
   completed: number
-): number => {
-  return db_lib.insert_data_into_todos(id, title, completed);
+): Promise<number> => {
+  try {
+    await db_lib.insert_data_into_todos(id, title, completed);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const updateToDo = (
+export const updateToDo = async (
   title: string,
   completed: number,
   id: number,
   owner_id: number
-): number => {
-  return db_lib.update_todo(title, completed, id, owner_id);
+): Promise<number> => {
+  try {
+    await db_lib.update_todo(title, completed, id, owner_id);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const removeToDo = (id: number, owner_id: number): number => {
-  return db_lib.remove_todo(id, owner_id);
+export const removeToDo = async (
+  id: number,
+  owner_id: number
+): Promise<number> => {
+  try {
+    await db_lib.remove_todo(id, owner_id);
+  } catch (err) {
+    return err;
+  }
 };
 
-export const removeCompletedToDo = (id: number, completed: number): number => {
-  return db_lib.remove_completed_todo(id, completed);
+export const removeCompletedToDo = async (
+  id: number,
+  completed: number
+): Promise<number> => {
+  try {
+    await db_lib.remove_completed_todo(id, completed);
+  } catch (err) {
+    return err;
+  }
 };
 
 // store ops

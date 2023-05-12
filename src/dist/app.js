@@ -34,7 +34,7 @@ const port = process.env.PORT;
 // mem store
 const options = {
     checkPeriod: 20 * 60 * 1000,
-    maxAge: 50 * 60 * 1000, // Sessions expire after 50 minutes
+    maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
 };
 const MemoryStoreConstructor = (0, memorystore_1.default)(express_session_1.default);
 const memoryStore = new MemoryStoreConstructor(options);

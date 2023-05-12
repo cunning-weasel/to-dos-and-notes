@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
-import MemoryStore, { MemoryStoreOptions } from "memorystore";
+import MemoryStore from "memorystore";
+// const MemoryStore = require("memorystore")(session);
+import { MemoryStoreOptions } from "memorystore";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -69,7 +71,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     if (openDb()) {
       try {
-        const user = await getUserName(username);
+        const user = getUserName(username);
         if (!user) {
           return done(null, false, {
             message: "Incorrect username.",
