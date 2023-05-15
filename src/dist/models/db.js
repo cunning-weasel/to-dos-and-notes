@@ -35,52 +35,97 @@ const db_lib = ffi_napi_1.default.Library("modules/sqlite/sqlite_wrapper_libc.so
     delete_session: ["void", ["string"]],
 });
 // db ops
-const openDb = () => {
-    return db_lib.open_db();
-    // try {
-    //   await db_lib.open_db();
-    // } catch(err) {
-    //   return err;
-    // }
-};
+const openDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.open_db();
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.openDb = openDb;
-const closeDb = () => {
-    return db_lib.close_db();
-};
+const closeDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.close_db();
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.closeDb = closeDb;
-const showDbData = () => {
-    return db_lib.show_data_db();
-};
+const showDbData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.show_data_db();
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.showDbData = showDbData;
 // user ops
-const createUser = (username, hashedPassWord, salt) => {
-    return db_lib.create_user(username, hashedPassWord, salt);
-};
+const createUser = (username, hashedPassWord, salt) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.create_user(username, hashedPassWord, salt);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.createUser = createUser;
-const getUserName = (username) => {
-    return db_lib.username_get(username);
-};
+const getUserName = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.username_get(username);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.getUserName = getUserName;
-const getUserId = (id) => {
-    return db_lib.get_by_owner_id(id);
-};
+const getUserId = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.get_by_owner_id(id);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.getUserId = getUserId;
 // todo ops
-const insertIntoToDos = (id, title, completed) => {
-    return db_lib.insert_data_into_todos(id, title, completed);
-};
+const insertIntoToDos = (id, title, completed) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.insert_data_into_todos(id, title, completed);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.insertIntoToDos = insertIntoToDos;
-const updateToDo = (title, completed, id, owner_id) => {
-    return db_lib.update_todo(title, completed, id, owner_id);
-};
+const updateToDo = (title, completed, id, owner_id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.update_todo(title, completed, id, owner_id);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.updateToDo = updateToDo;
-const removeToDo = (id, owner_id) => {
-    return db_lib.remove_todo(id, owner_id);
-};
+const removeToDo = (id, owner_id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.remove_todo(id, owner_id);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.removeToDo = removeToDo;
-const removeCompletedToDo = (id, completed) => {
-    return db_lib.remove_completed_todo(id, completed);
-};
+const removeCompletedToDo = (id, completed) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield db_lib.remove_completed_todo(id, completed);
+    }
+    catch (err) {
+        return err;
+    }
+});
 exports.removeCompletedToDo = removeCompletedToDo;
 // store ops
 // need all methods for custom store impl.

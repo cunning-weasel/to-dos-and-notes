@@ -3,9 +3,6 @@ import dotenv from "dotenv";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
-import MemoryStore from "memorystore";
-// const MemoryStore = require("memorystore")(session);
-import { MemoryStoreOptions } from "memorystore";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
@@ -24,12 +21,12 @@ const app = express();
 const port: string = process.env.PORT;
 
 // mem store
-const options: MemoryStoreOptions = {
-  checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
-  maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
-};
-const MemoryStoreConstructor = MemoryStore(session);
-const memoryStore = new MemoryStoreConstructor(options);
+// const options: MemoryStoreOptions = {
+//   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+//   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
+// };
+// const MemoryStoreConstructor = MemoryStore(session);
+// const memoryStore = new MemoryStoreConstructor(options);
 
 // view engine
 app.set("views", path.join(__dirname, "views"));
@@ -59,9 +56,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    store: new customSqLiteStore({
-      memoryStore: memoryStore, // cache-layer above sqlite store
-    }),
+    store: new customSqLiteStore(),
   })
 );
 app.use(passport.initialize());

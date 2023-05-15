@@ -17,7 +17,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
 const express_session_1 = __importDefault(require("express-session"));
-const memorystore_1 = __importDefault(require("memorystore"));
 const path_1 = __importDefault(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -32,12 +31,12 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 // mem store
-const options = {
-    checkPeriod: 20 * 60 * 1000,
-    maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
-};
-const MemoryStoreConstructor = (0, memorystore_1.default)(express_session_1.default);
-const memoryStore = new MemoryStoreConstructor(options);
+// const options: MemoryStoreOptions = {
+//   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+//   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
+// };
+// const MemoryStoreConstructor = MemoryStore(session);
+// const memoryStore = new MemoryStoreConstructor(options);
 // view engine
 app.set("views", path_1.default.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -61,9 +60,7 @@ app.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: new db_1.customSqLiteStore({
-        memoryStore: memoryStore, // cache-layer above sqlite store
-    }),
+    store: new db_1.customSqLiteStore(),
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.authenticate("session"));
@@ -71,7 +68,7 @@ app.use(passport_1.default.authenticate("session"));
 passport_1.default.use(new passport_local_1.Strategy((username, password, done) => __awaiter(void 0, void 0, void 0, function* () {
     if ((0, db_1.openDb)()) {
         try {
-            const user = yield (0, db_1.getUserName)(username);
+            const user = (0, db_1.getUserName)(username);
             if (!user) {
                 return done(null, false, {
                     message: "Incorrect username.",
