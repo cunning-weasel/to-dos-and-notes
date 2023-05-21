@@ -127,7 +127,8 @@ export const removeCompletedToDo = async (
   } catch (err) {
     return err;
   }
-};
+};  // const MemoryStoreConstructor = MemoryStore(session);
+// const memoryStore = new MemoryStoreConstructor(options);
 
 // store ops
 // need all methods for custom store impl.
@@ -163,6 +164,10 @@ export class customSqLiteStore implements Store {
   };
 
   touch = async (
+  // const options {
+  //   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+  //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
+  // };
     sid: string,
     session: SessionData,
     callback?: (err?: any) => void

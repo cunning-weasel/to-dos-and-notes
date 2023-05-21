@@ -19,11 +19,19 @@ int generate_random_iv(unsigned char *iv, size_t iv_len)
     {
         return -1;
     }
-    // return iv_len;
+    // return iv;
     return 0;
 }
 
 // TODO random UUIDs for session ID in db?
+int gen_random_uuid(unsigned char *buf, size_t num)
+{
+    if (RAND_bytes(buf, num) != 1)
+    {
+        return -1;
+    }
+    return buf;
+}
 
 // Argon2
 // hash that derives a key from a password using a salt and iteration count

@@ -20,14 +20,6 @@ dotenv.config();
 const app = express();
 const port: string = process.env.PORT;
 
-// mem store
-// const options: MemoryStoreOptions = {
-//   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
-//   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
-// };
-// const MemoryStoreConstructor = MemoryStore(session);
-// const memoryStore = new MemoryStoreConstructor(options);
-
 // view engine
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
