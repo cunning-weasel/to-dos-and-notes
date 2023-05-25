@@ -121,7 +121,7 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
         return 0;
     }
 
-    while (1)
+    for (;;)
     {
         if (do_crypt)
         {

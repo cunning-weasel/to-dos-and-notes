@@ -30,13 +30,6 @@ const encryption_1 = require("./models/encryption");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
-// mem store
-// const options: MemoryStoreOptions = {
-//   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
-//   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
-// };
-// const MemoryStoreConstructor = MemoryStore(session);
-// const memoryStore = new MemoryStoreConstructor(options);
 // view engine
 app.set("views", path_1.default.join(__dirname, "views"));
 app.set("view engine", "pug");

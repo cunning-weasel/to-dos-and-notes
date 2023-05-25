@@ -1,6 +1,3 @@
-// TO-DO
-// need to use prepared statements - avoid sql injection
-
 #include <stdio.h>
 #include <sqlite3.h>
 #include <time.h>
@@ -13,6 +10,8 @@ char *users_table = "users";
 char *todos_table = "to-dos";
 char *sessions_table = "sessions";
 char *user_name = "";
+
+// TO-DO use prepared statements - avoid sql injection
 
 // print out name and val for each col on the row
 static int row_callback(void *NotUsed, int numCols, char **valEachCol, char **azColName)

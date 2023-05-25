@@ -156,7 +156,7 @@ export class customSqLiteStore implements Store {
   ): Promise<void> => {
     // update && insert session
     try {
-      await db_lib.upsert_session(sid, session.cookie.maxAge);
+      await db_lib.upsert_session(sid, session);
       callback?.();
     } catch (err) {
       callback?.(err);

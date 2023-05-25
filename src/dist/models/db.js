@@ -125,8 +125,9 @@ const removeCompletedToDo = (id, completed) => __awaiter(void 0, void 0, void 0,
     catch (err) {
         return err;
     }
-});
+}); // const MemoryStoreConstructor = MemoryStore(session);
 exports.removeCompletedToDo = removeCompletedToDo;
+// const memoryStore = new MemoryStoreConstructor(options);
 // store ops
 // need all methods for custom store impl.
 // thank gawd for .ts auto-everything
@@ -154,7 +155,12 @@ class customSqLiteStore {
                 callback === null || callback === void 0 ? void 0 : callback(err);
             }
         });
-        this.touch = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
+        this.touch = (
+        // const options {
+        //   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+        //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
+        // };
+        sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
             // update session, resets timer
             try {
                 yield db_lib.update_session(sid, session.cookie.maxAge);
