@@ -21,8 +21,8 @@ const db_lib = ffi.Library("modules/sqlite/sqlite_wrapper_libc.so", {
   remove_todo: ["int", ["int", "int"]],
   remove_completed_todo: ["int", ["int", "int"]],
   // store ops
-  load_session: ["void", ["string"]],
-  upsert_session: ["void", ["string", "int"]],
+  pull_session: ["void", ["string"]],
+  upsert_session: ["void", ["string", "string"]],
   update_session: ["void", ["string", "int"]],
   delete_session: ["void", ["string"]],
 });
@@ -127,57 +127,50 @@ export const removeCompletedToDo = async (
   } catch (err) {
     return err;
   }
-};  // const MemoryStoreConstructor = MemoryStore(session);
-// const memoryStore = new MemoryStoreConstructor(options);
+};
 
 // store ops
-// need all methods for custom store impl.
-// thank gawd for .ts auto-everything
+// need all methods for custom store impl. thank gawd for ts auto-everything
 export class customSqLiteStore implements Store {
   // start custom impl
-  get = async (
-    sid: string,
-    callback: (err: any, session: SessionData | null) => void
-  ): Promise<void> => {
+  get = async (sid: string, callback: any): Promise<void> => {
     // should generate sid here?
-    //
     try {
-      const session = await db_lib.load_session(sid);
-      callback(null, session);
+      await db_lib.pull_session(sid);
+      callback?.();
     } catch (err) {
-      callback(err, session);
+      callback?.(err);
     }
   };
 
   set = async (
     sid: string,
     session: SessionData,
-    callback?: (err?: any) => void
+    callback: any
   ): Promise<void> => {
-    // update && insert session
     try {
       await db_lib.upsert_session(sid, session);
       callback?.();
     } catch (err) {
-      callback?.(err);
+      callback(err);
     }
   };
 
   touch = async (
-  // const options {
-  //   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
-  //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
-  // };
+    // const options {
+    //   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
+    //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
+    // };
     sid: string,
     session: SessionData,
-    callback?: (err?: any) => void
+    callback: any
   ): Promise<void> => {
     // update session, resets timer
     try {
-      await db_lib.update_session(sid, session.cookie.maxAge);
-      callback?.();
+      await db_lib.update_session(sid, session);
+      callback();
     } catch (err) {
-      callback?.(err);
+      callback(err);
     }
   };
 

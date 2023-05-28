@@ -148,7 +148,7 @@ class customSqLiteStore {
         this.set = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
             // update && insert session
             try {
-                yield db_lib.upsert_session(sid, session.cookie.maxAge);
+                yield db_lib.upsert_session(sid, session);
                 callback === null || callback === void 0 ? void 0 : callback();
             }
             catch (err) {

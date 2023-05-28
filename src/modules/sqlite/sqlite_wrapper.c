@@ -74,7 +74,7 @@ int open_db(void)
 }
 
 // sessions ops
-void load_session(char *sid, char *session, char *expire)
+void pull_session(char *sid, char *session, char *expire)
 {
     sql = sqlite3_mprintf("INSERT OR IGNORE INTO sessions (sid, session, expire) VALUES ('%q', '%q', '%q');", sid, session, expire);
     return_code = sqlite3_exec(db, sql, row_callback, 0, &zErrMsg);
