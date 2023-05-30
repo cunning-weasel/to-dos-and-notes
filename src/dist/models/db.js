@@ -180,6 +180,7 @@ class customSqLiteStore {
         });
     }
     // end custom impl methods
+    // ...
     clear(callback) {
         throw new Error("Method not implemented.");
     }

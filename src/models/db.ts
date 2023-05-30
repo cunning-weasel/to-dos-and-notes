@@ -2,8 +2,6 @@ import { Request } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { Store, SessionData, Session } from "express-session";
 
-import { ParsedQs } from "qs";
-
 import ffi from "ffi-napi";
 
 // function signatures
@@ -187,93 +185,82 @@ export class customSqLiteStore implements Store {
     }
   };
   // end custom impl methods
+
+  // ...
+  // ...
   // ...
 
-  clear?(callback?: (err?: any) => void): void {
-    throw new Error("Method not implemented.");
-  }
-  all?(
-    callback: (
-      err: any,
-      obj?: SessionData[] | { [sid: string]: SessionData }
-    ) => void
-  ): void {
-    throw new Error("Method not implemented.");
-  }
-  length?(callback: (err: any, length?: number) => void): void {
-    throw new Error("Method not implemented.");
-  }
+  // other methods need at least an empty implementations
   regenerate(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
-    callback: (err?: any) => any
-  ): void {
-    throw new Error("Method not implemented.");
-  }
-  load(sid: string, callback: (err: any, session?: SessionData) => any): void {
-    throw new Error("Method not implemented.");
-  }
+    req: Request<ParamsDictionary, any, any, any>,
+    callback: (err?: any) => void
+  ): void {}
+  load(
+    sid: string,
+    callback: (err: any, session?: SessionData) => void
+  ): void {}
   createSession(
-    req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>,
+    req: Request<ParamsDictionary, any, any, any>,
     session: SessionData
   ): Session & SessionData {
-    throw new Error("Method not implemented.");
+    return {} as Session & SessionData;
   }
   addListener(
     eventName: string | symbol,
     listener: (...args: any[]) => void
   ): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   on(eventName: string | symbol, listener: (...args: any[]) => void): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   once(eventName: string | symbol, listener: (...args: any[]) => void): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   removeListener(
     eventName: string | symbol,
     listener: (...args: any[]) => void
   ): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   off(eventName: string | symbol, listener: (...args: any[]) => void): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   removeAllListeners(event?: string | symbol): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   setMaxListeners(n: number): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   getMaxListeners(): number {
-    throw new Error("Method not implemented.");
+    return 0;
   }
-  listeners(eventName: string | symbol): Function[] {
-    throw new Error("Method not implemented.");
+  listeners(event: string | symbol): Function[] {
+    return [];
   }
-  rawListeners(eventName: string | symbol): Function[] {
-    throw new Error("Method not implemented.");
+  rawListeners(event: string | symbol): Function[] {
+    return [];
   }
   emit(eventName: string | symbol, ...args: any[]): boolean {
-    throw new Error("Method not implemented.");
+    return false;
   }
-  listenerCount(eventName: string | symbol): number {
-    throw new Error("Method not implemented.");
+  listenerCount(event: string | symbol): number {
+    return 0;
   }
   prependListener(
     eventName: string | symbol,
     listener: (...args: any[]) => void
   ): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   prependOnceListener(
     eventName: string | symbol,
     listener: (...args: any[]) => void
   ): this {
-    throw new Error("Method not implemented.");
+    return this;
   }
   eventNames(): (string | symbol)[] {
-    throw new Error("Method not implemented.");
+    return [];
   }
 }
 
