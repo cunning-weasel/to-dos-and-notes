@@ -275,13 +275,13 @@ int close_db(void)
     return 0;
 }
 
-// compile and link: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
+// compile and link exec: gcc -o output_sqlite_wrapper sqlite_wrapper.c -lsqlite3
 // run comiled file: ./output_sqlite_wrapper
 
 // install sqlite stuff linux
 // sudo apt-get install sqlite3 libsqlite3-dev
 
-// same but for ffi lib (-03 max perf, maybe less at first for bugs?)
+// same but exec for ffi lib (-03 max perf, maybe less at first for bugs?)
 // i.e
 // compile lib ffi:
 //  gcc -shared -fpic sqlite_wrapper.c -o sqlite_wrapper_libc.so -O3

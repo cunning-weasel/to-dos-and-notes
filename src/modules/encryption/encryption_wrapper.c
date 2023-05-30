@@ -35,7 +35,7 @@ int gen_random_uuid(unsigned char *buf, size_t num)
 
 // Argon2
 // hash that derives a key from a password using a salt and iteration count
-int argon_go_vroom(char *pwd[], char *salt[])
+int argon_go_vroom(char *pwd, char *salt)
 {
     int retval = 1;
     EVP_KDF *kdf = NULL;
@@ -46,7 +46,7 @@ int argon_go_vroom(char *pwd[], char *salt[])
     //  threads = 2,
     //  memcost = 65536;
     // pwd will be user input, salt will be generate_random_iv
-    char pwd[] = "inwonderland", salt[] = "saltsalt";
+    pwd = "inwonderland", salt = "saltsalt";
     /* derive result */
     size_t outlen = 128;
     unsigned char result[outlen];
@@ -121,7 +121,7 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
         return 0;
     }
 
-    for (;;)
+    while (1)
     {
         if (do_crypt)
         {
@@ -168,7 +168,8 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
 //  gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -O3
 // NOTE!!
 // might need to include lib flag:
-// gcc -shared -fpic sqlite_wrapper.c -o sqlite_wrapper_libc.so -lsqlite3
+// gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -lssl -lcrypto
+
 
 // ...
 

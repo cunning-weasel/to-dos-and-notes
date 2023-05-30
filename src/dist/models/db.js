@@ -29,8 +29,8 @@ const db_lib = ffi_napi_1.default.Library("modules/sqlite/sqlite_wrapper_libc.so
     remove_todo: ["int", ["int", "int"]],
     remove_completed_todo: ["int", ["int", "int"]],
     // store ops
-    load_session: ["void", ["string"]],
-    upsert_session: ["void", ["string", "int"]],
+    pull_session: ["void", ["string"]],
+    upsert_session: ["void", ["string", "string"]],
     update_session: ["void", ["string", "int"]],
     delete_session: ["void", ["string"]],
 });
@@ -125,34 +125,31 @@ const removeCompletedToDo = (id, completed) => __awaiter(void 0, void 0, void 0,
     catch (err) {
         return err;
     }
-}); // const MemoryStoreConstructor = MemoryStore(session);
+});
 exports.removeCompletedToDo = removeCompletedToDo;
-// const memoryStore = new MemoryStoreConstructor(options);
 // store ops
-// need all methods for custom store impl.
-// thank gawd for .ts auto-everything
+// need all methods for custom store impl. thank gawd for ts auto-everything
 class customSqLiteStore {
     constructor() {
         // start custom impl
         this.get = (sid, callback) => __awaiter(this, void 0, void 0, function* () {
             // should generate sid here?
-            //
             try {
-                const session = yield db_lib.load_session(sid);
-                callback(null, session);
+                yield db_lib.pull_session(sid);
+                callback === null || callback === void 0 ? void 0 : callback();
             }
             catch (err) {
-                callback(err, session);
+                callback === null || callback === void 0 ? void 0 : callback(err);
             }
         });
-        this.set = (sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
-            // update && insert session
+        this.set = (sid, session, // SessionData
+        callback) => __awaiter(this, void 0, void 0, function* () {
             try {
                 yield db_lib.upsert_session(sid, session);
                 callback === null || callback === void 0 ? void 0 : callback();
             }
             catch (err) {
-                callback === null || callback === void 0 ? void 0 : callback(err);
+                callback(err);
             }
         });
         this.touch = (
@@ -160,14 +157,15 @@ class customSqLiteStore {
         //   checkPeriod: 20 * 60 * 1000, // check for expired sessions every 20 minutes
         //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
         // };
-        sid, session, callback) => __awaiter(this, void 0, void 0, function* () {
+        sid, session, // SessionData
+        callback) => __awaiter(this, void 0, void 0, function* () {
             // update session, resets timer
             try {
-                yield db_lib.update_session(sid, session.cookie.maxAge);
-                callback === null || callback === void 0 ? void 0 : callback();
+                yield db_lib.update_session(sid, session);
+                callback();
             }
             catch (err) {
-                callback === null || callback === void 0 ? void 0 : callback(err);
+                callback(err);
             }
         });
         this.destroy = (sid, callback) => __awaiter(this, void 0, void 0, function* () {

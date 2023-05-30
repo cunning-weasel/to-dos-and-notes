@@ -145,7 +145,7 @@ export class customSqLiteStore implements Store {
 
   set = async (
     sid: string,
-    session: SessionData,
+    session: any, // SessionData
     callback: any
   ): Promise<void> => {
     try {
@@ -162,7 +162,7 @@ export class customSqLiteStore implements Store {
     //   maxAge: 50 * 60 * 1000, // sessions expire after 50 minutes
     // };
     sid: string,
-    session: SessionData,
+    session: any, // SessionData
     callback: any
   ): Promise<void> => {
     // update session, resets timer
@@ -187,6 +187,7 @@ export class customSqLiteStore implements Store {
     }
   };
   // end custom impl methods
+  // ...
 
   clear?(callback?: (err?: any) => void): void {
     throw new Error("Method not implemented.");
