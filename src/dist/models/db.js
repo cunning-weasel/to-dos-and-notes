@@ -181,68 +181,58 @@ class customSqLiteStore {
     }
     // end custom impl methods
     // ...
-    clear(callback) {
-        throw new Error("Method not implemented.");
-    }
-    all(callback) {
-        throw new Error("Method not implemented.");
-    }
-    length(callback) {
-        throw new Error("Method not implemented.");
-    }
-    regenerate(req, callback) {
-        throw new Error("Method not implemented.");
-    }
-    load(sid, callback) {
-        throw new Error("Method not implemented.");
-    }
+    // ...
+    // ...
+    // other methods need at least an empty implementations
+    regenerate(req, callback) { }
+    load(sid, callback) { }
     createSession(req, session) {
-        throw new Error("Method not implemented.");
+        return {};
     }
     addListener(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     on(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     once(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     removeListener(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     off(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     removeAllListeners(event) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     setMaxListeners(n) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     getMaxListeners() {
-        throw new Error("Method not implemented.");
+        return 0;
     }
-    listeners(eventName) {
-        throw new Error("Method not implemented.");
+    listeners(event) {
+        return [];
     }
-    rawListeners(eventName) {
-        throw new Error("Method not implemented.");
+    rawListeners(event) {
+        return [];
     }
     emit(eventName, ...args) {
-        throw new Error("Method not implemented.");
+        return false;
     }
-    listenerCount(eventName) {
-        throw new Error("Method not implemented.");
+    listenerCount(event) {
+        return 0;
     }
     prependListener(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     prependOnceListener(eventName, listener) {
-        throw new Error("Method not implemented.");
+        return this;
     }
     eventNames() {
-        throw new Error("Method not implemented.");
+        return [];
     }
 }
 exports.customSqLiteStore = customSqLiteStore;
