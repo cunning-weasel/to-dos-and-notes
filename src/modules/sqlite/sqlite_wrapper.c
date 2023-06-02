@@ -136,8 +136,34 @@ void delete_session(char *sid)
     }
 }
 
+// use prepared statements i.e:
 // create an initial user (username: alice, password: inwonderland) with added salt
-int create_user(char *user_name, char *hashed_password, char *salt[])
+// "INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES (?, ?, ?);"
+
+// 1. create prepared statement object using sqlite3_prepare_v2()
+// needs to be a function pointer
+// int sqlite3_prepare_v2(
+//   sqlite3 db,            /* Database handle */
+//   const char *zSql,       /* SQL statement, UTF-8 encoded */
+//   int nByte,              /* Maximum length of zSql in bytes. */
+//   sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
+//   const char **pzTail     /* OUT: Pointer to unused portion of zSql */
+// );
+
+// 2. bind vals to params using the sqlite3_bind_*() interfaces
+// doublecheck type - guess binary for hash and images?
+// int sqlite3_bind_blob(sqlite3_stmt *, int, const void *, int n, void (*)(void *));
+
+// 3. run the SQL by calling sqlite3_step() one or more times
+// int sqlite3_step(sqlite3_stmt*);
+
+// 4. reset the prepared statement using sqlite3_reset() then go back to step 2 zero or more times
+// int sqlite3_reset(sqlite3_stmt *pStmt);
+
+// 5. destroy the object using sqlite3_finalize()
+// int sqlite3_finalize(sqlite3_stmt *pStmt);
+
+int create_user(char *user_name, char *hashed_password, char *salt)
 {
     // char *salt; - add to model to expidite db op? change data type too!
     sql = sqlite3_mprintf("INSERT OR IGNORE INTO users (username, hashed_password, salt) VALUES ('%q', '%q', '%q');", user_name, hashed_password, salt);
