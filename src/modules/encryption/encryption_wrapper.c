@@ -103,6 +103,7 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
     // argon_go_vroom(key, iv);
 
     /* Don't set key or IV right away; we want to check lengths */
+    // TO-DO remove argon and add PBKDF2
     ctx = EVP_CIPHER_CTX_new();
     if (!EVP_CipherInit_ex2(ctx, EVP_aes_128_cbc(), key, iv, do_crypt, NULL))
     {
@@ -169,7 +170,6 @@ int encryptor(FILE *in, FILE *out, int do_crypt)
 // NOTE!!
 // might need to include lib flag:
 // gcc -shared -fpic encryption_wrapper.c -o encryption_wrapper_libc.so -lssl -lcrypto
-
 
 // ...
 
